@@ -1,0 +1,10 @@
+TailwindCSS,
+@gsap/react 
+@reduxjs/toolkit
+axios gsap 
+lucide-react 
+react
+react-dom 
+react-masonry-css 
+react-redux 
+react-toastify
