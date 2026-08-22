@@ -8,3 +8,11 @@ react-dom
 react-masonry-css 
 react-redux 
 react-toastify
+
+
+
+
+last commit msg :
+feat : add swipe gesture hook and feature navigation
+
+- Also used it on GetStarted Page to show features on swipe also

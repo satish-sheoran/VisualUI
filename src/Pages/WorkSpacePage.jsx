@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS, CSS_EASING } from '../constants/style'
 import { toast } from 'react-toastify'
 import { updateTheme } from '../store/features/DevicePreferences'
+import { setActivePage } from '../store/features/systemSlice'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
@@ -16,6 +17,7 @@ const WorkSpacePage = () => {
     const Theme = useSelector((store) => store.Preferences.Theme)
     const Device = useSelector(store => store.Preferences.Device)
     const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
+    const ActivePage = useSelector(store => store.systemSlice.ActivePage)
 
     //states 
     const [showBurger, setshowBurger] = useState(false)
@@ -28,10 +30,10 @@ const WorkSpacePage = () => {
 
         // working here
         gsap.fromTo(HamBurgerRef.current, {
-            x: showBurger?'-100%':'0%',
-        },{
-            x: showBurger?'0%':'-100%',
-            durtaion: 0.15,
+            x: showBurger ? '-100%' : '0%',
+        }, {
+            x: showBurger ? '0%' : '-100%',
+            duration: 0.25,
             ease: 'sine.out'
         })
     }, [showBurger])
@@ -75,34 +77,33 @@ const WorkSpacePage = () => {
                 backgroundColor: Theme.header
             }} className={`border-t p-[2.5%] w-full flex justify-center items-center gap-2`}>
                 <div className={` flex gap-2 w-[47%]`}>
-                    <div
-                        onClick={() => toast.info('Adding Soon...')}
-                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                        <ICONS.House style={{
-                            color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
-                        }} strokeWidth={2.5} size={20} />
-                        <span
-                            style={{
-                                color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
-                                fontFamily: Weights.SemiBold,
-                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                            }}
-                        >Home</span>
-                    </div>
-                    <div
-                        onClick={() => toast.info('Adding Soon...')}
-                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                        <ICONS.Component style={{
-                            color: Theme.primaryText
-                        }} strokeWidth={2.5} size={20} />
-                        <span
-                            style={{
-                                color: Theme.primaryText,
-                                fontFamily: Weights.SemiBold,
-                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                            }}
-                        >Assets</span>
-                    </div>
+                    {
+                        [{
+                            page: 'Home',
+                            icon: 'Home'
+                        }, {
+                            page: 'Assets',
+                            icon: 'Component'
+                        }].map(({ page, icon }) => {
+                            let Icons = ICONS[icon]
+                            return Icons && <div key={page}
+                                onClick={() => dispatch(setActivePage({ newSection: page }))}
+                                className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
+                                <Icons style={{
+                                    color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                }} strokeWidth={2.5} size={20} />
+
+                                <span
+                                    style={{
+                                        color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                        fontFamily: Weights.SemiBold,
+                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
+                                    }}
+                                >{page}</span>
+                            </div>
+                        })
+                    }
+
                 </div>
                 {/* plus */}
                 <div
@@ -117,34 +118,31 @@ const WorkSpacePage = () => {
                 </div>
                 {/* right side */}
                 <div className={`flex gap-2 w-[47%]`}>
-                    <div
-                        onClick={() => toast.info('Adding Soon...')}
-                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                        <ICONS.FolderKanban style={{
-                            color: Theme.primaryText
-                        }} strokeWidth={2.5} size={20} />
-                        <span
-                            style={{
-                                color: Theme.primaryText,
-                                fontFamily: Weights.SemiBold,
-                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                            }}
-                        >Projects</span>
-                    </div>
-                    <div
-                        onClick={() => toast.info('Adding Soon...')}
-                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                        <ICONS.User style={{
-                            color: Theme.primaryText
-                        }} strokeWidth={2.5} size={20} />
-                        <span
-                            style={{
-                                color: Theme.primaryText,
-                                fontFamily: Weights.SemiBold,
-                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                            }}
-                        >Profile</span>
-                    </div>
+                    {
+                        [{
+                            page: 'Projects',
+                            icon: 'FolderKanban'
+                        }, {
+                            page: 'Profile',
+                            icon: 'User'
+                        }].map(({ page, icon }) => {
+                            let Icons = ICONS[icon]
+                            return Icons && <div key={page}
+                                onClick={() => dispatch(setActivePage({ newSection: page }))}
+                                className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
+                                <Icons style={{
+                                    color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                }} strokeWidth={2.5} size={20} />
+                                <span
+                                    style={{
+                                        color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                        fontFamily: Weights.SemiBold,
+                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
+                                    }}
+                                >{page}</span>
+                            </div>
+                        })
+                    }
                 </div>
             </footer>
 
@@ -228,7 +226,7 @@ const WorkSpacePage = () => {
                             },
                             {
                                 icon: 'Component',
-                                option: 'Assests'
+                                option: 'Assets'
                             },
                             {
                                 icon: 'Settings',
@@ -242,10 +240,16 @@ const WorkSpacePage = () => {
                             const Icon = ICONS[icon];
 
                             return Icon && <div key={option}
-                                onClick={() => toast.info('Adding Soon...')}
-                                style={{
-                                    backgroundColor: idx === 0 ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : '',
-                                    '--hover': idx === 0 ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : Theme.third
+                                onClick={() => {
+                                    if (option === 'Home' || option === 'Projects') dispatch(setActivePage({ newSection: option }))
+                                    else if (option === 'Templates' || option === 'Assets') dispatch(setActivePage({ newSection: 'Assets' }))
+                                    else {
+                                        toast.info('Adding Soon...')
+                                    }
+                                    setshowBurger(false)
+                                }} style={{
+                                    backgroundColor: ActivePage===option || (ActivePage==='Assets' && option==='Templates' )  ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : '',
+                                    '--hover': ActivePage===option || (ActivePage==='Assets' && option==='Templates' ) ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : Theme.third
                                 }}
                                 className={`active:scale-97 HOVER_CLASS w-full rounded-xl flex items-center gap-3 px-2.5 py-3`}
                             >
