@@ -22,3 +22,25 @@ export const GET_STARTED_DATA = [
         description: 'Design responsive interfaces and bring your ideas to life.'
     }
 ]
+
+export const USER_NAME = 'Alex Johnson'
+export const USER_MAIL = 'alex@gmail.com'
+
+export const ALL_SECTIONS = [
+    {
+        Section : 'Home',
+        FileName : 'Home'
+    },
+    {
+        Section : 'Assets',
+        FileName : 'Assets'
+    },
+    {
+        Section : 'Projects',
+        FileName : 'Projects'
+    },
+    {
+        Section : 'Profile',
+        FileName : 'Profile'
+    }
+]

@@ -31,7 +31,7 @@ const App = () => {
           <>
             {/* <GetStartedPage /> */}
             {/* <LoadingInitialPage /> */}
-            {/* <WorkSpacePage /> */}
+            <WorkSpacePage />
           </>
           :
           <div style={{

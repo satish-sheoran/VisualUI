@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { APP_NAME } from '../constants'
+import { ALL_SECTIONS, APP_NAME, USER_MAIL, USER_NAME } from '../constants'
 import * as ICONS from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS, CSS_EASING } from '../constants/style'
@@ -8,6 +8,19 @@ import { updateTheme } from '../store/features/DevicePreferences'
 import { setActivePage } from '../store/features/systemSlice'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import Setting from '../components/Settings/Setting'
+import Home from '../components/Home/Home'
+import Assets from '../components/Assets/Assets'
+import Projects from '../components/Projects/Projects'
+import Profile from '../components/Profile/Profile'
+
+
+const FILES_SECTIONS = {
+    Home,
+    Assets,
+    Projects,
+    Profile
+}
 
 const WorkSpacePage = () => {
 
@@ -66,86 +79,97 @@ const WorkSpacePage = () => {
                 </div>
             </nav>
 
-            {/* body */}
-            <div className={`w-full grow h-50 `}>
-                hello this is demo body
-            </div>
+            {
+                ActivePage !== 'Settings' &&
+                <>
+                    {/* body */}
+                    <div className={`w-full grow h-50 `}>
+                        {ALL_SECTIONS.map(({ Section, FileName }) => {
+                            const Component = FILES_SECTIONS[FileName]
 
-            {/* footer */}
-            <footer style={{
-                borderColor: Theme.third,
-                backgroundColor: Theme.header
-            }} className={`border-t p-[2.5%] w-full flex justify-center items-center gap-2`}>
-                <div className={` flex gap-2 w-[47%]`}>
-                    {
-                        [{
-                            page: 'Home',
-                            icon: 'Home'
-                        }, {
-                            page: 'Assets',
-                            icon: 'Component'
-                        }].map(({ page, icon }) => {
-                            let Icons = ICONS[icon]
-                            return Icons && <div key={page}
-                                onClick={() => dispatch(setActivePage({ newSection: page }))}
-                                className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                                <Icons style={{
-                                    color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
-                                }} strokeWidth={2.5} size={20} />
-
-                                <span
-                                    style={{
-                                        color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
-                                        fontFamily: Weights.SemiBold,
-                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                                    }}
-                                >{page}</span>
+                            return Component && Section === ActivePage && <div key={Section} className={`w-full h-full overflow-hidden`}>
+                                <Component />
                             </div>
-                        })
-                    }
 
-                </div>
-                {/* plus */}
-                <div
-                    onClick={() => toast.info('Adding Soon...')}
-                    style={{
-                        color: COMMON_COLORS.White,
-                        backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Hover_Clr,
-                        borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
-                    }}
-                    className={`active:scale-95 border rounded-full p-1.5 flex items-center justify-center`}>
-                    <ICONS.Plus size={30} strokeWidth={2.5} />
-                </div>
-                {/* right side */}
-                <div className={`flex gap-2 w-[47%]`}>
-                    {
-                        [{
-                            page: 'Projects',
-                            icon: 'FolderKanban'
-                        }, {
-                            page: 'Profile',
-                            icon: 'User'
-                        }].map(({ page, icon }) => {
-                            let Icons = ICONS[icon]
-                            return Icons && <div key={page}
-                                onClick={() => dispatch(setActivePage({ newSection: page }))}
-                                className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
-                                <Icons style={{
-                                    color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
-                                }} strokeWidth={2.5} size={20} />
-                                <span
-                                    style={{
-                                        color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
-                                        fontFamily: Weights.SemiBold,
-                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                                    }}
-                                >{page}</span>
-                            </div>
-                        })
-                    }
-                </div>
-            </footer>
+                        })}                    </div>
+                    {/* footer */}
+                    <footer style={{
+                        borderColor: Theme.third,
+                        backgroundColor: Theme.header
+                    }} className={`border-t p-[2.5%] w-full flex justify-center items-center gap-2`}>
+                        <div className={` flex gap-2 w-[47%]`}>
+                            {
+                                [{
+                                    page: 'Home',
+                                    icon: 'Home'
+                                }, {
+                                    page: 'Assets',
+                                    icon: 'Component'
+                                }].map(({ page, icon }) => {
+                                    let Icons = ICONS[icon]
+                                    return Icons && <div key={page}
+                                        onClick={() => dispatch(setActivePage({ newSection: page }))}
+                                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
+                                        <Icons style={{
+                                            color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                        }} strokeWidth={2.5} size={20} />
 
+                                        <span
+                                            style={{
+                                                color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                                fontFamily: Weights.SemiBold,
+                                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
+                                            }}
+                                        >{page}</span>
+                                    </div>
+                                })
+                            }
+
+                        </div>
+                        {/* plus */}
+                        <div
+                            onClick={() => toast.info('Adding Soon...')}
+                            style={{
+                                color: COMMON_COLORS.White,
+                                backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Hover_Clr,
+                                borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                            }}
+                            className={`active:scale-95 border rounded-full p-1.5 flex items-center justify-center`}>
+                            <ICONS.Plus size={30} strokeWidth={2.5} />
+                        </div>
+                        {/* right side */}
+                        <div className={`flex gap-2 w-[47%]`}>
+                            {
+                                [{
+                                    page: 'Projects',
+                                    icon: 'FolderKanban'
+                                }, {
+                                    page: 'Profile',
+                                    icon: 'User'
+                                }].map(({ page, icon }) => {
+                                    let Icons = ICONS[icon]
+                                    return Icons && <div key={page}
+                                        onClick={() => dispatch(setActivePage({ newSection: page }))}
+                                        className={`active:scale-95 grow w-1/2 rounded-2xl flex flex-col gap-0.5 items-center justify-center`}>
+                                        <Icons style={{
+                                            color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                        }} strokeWidth={2.5} size={20} />
+                                        <span
+                                            style={{
+                                                color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                                fontFamily: Weights.SemiBold,
+                                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
+                                            }}
+                                        >{page}</span>
+                                    </div>
+                                })
+                            }
+                        </div>
+                    </footer>
+                </>
+            }
+
+            {ActivePage === 'Settings' && <Setting />}
 
             {/* hamburger */}
             <section
@@ -185,14 +209,14 @@ const WorkSpacePage = () => {
                                 fontFamily: Weights.ExtraBold,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
                             }}>
-                                Alex Johnson
+                                {USER_NAME}
                             </span>
                             <span style={{
                                 color: Theme.secText,
                                 fontFamily: Weights.Bold,
                                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
                             }}>
-                                alex@gmail.com
+                                {USER_MAIL}
                             </span>
                         </p>
                         <p
@@ -236,31 +260,31 @@ const WorkSpacePage = () => {
                                 icon: 'BadgeQuestionMark',
                                 option: 'Help & Support'
                             }
-                        ].map(({ option, icon }, idx) => {
+                        ].map(({ option, icon }) => {
                             const Icon = ICONS[icon];
 
                             return Icon && <div key={option}
                                 onClick={() => {
-                                    if (option === 'Home' || option === 'Projects') dispatch(setActivePage({ newSection: option }))
+                                    if (option === 'Home' || option === 'Projects' || option === 'Settings') dispatch(setActivePage({ newSection: option }))
                                     else if (option === 'Templates' || option === 'Assets') dispatch(setActivePage({ newSection: 'Assets' }))
                                     else {
                                         toast.info('Adding Soon...')
                                     }
                                     setshowBurger(false)
                                 }} style={{
-                                    backgroundColor: ActivePage===option || (ActivePage==='Assets' && option==='Templates' )  ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : '',
-                                    '--hover': ActivePage===option || (ActivePage==='Assets' && option==='Templates' ) ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : Theme.third
+                                    backgroundColor: ActivePage === option ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : '',
+                                    '--hover': ActivePage === option ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr : Theme.third
                                 }}
                                 className={`active:scale-97 HOVER_CLASS w-full rounded-xl flex items-center gap-3 px-2.5 py-3`}
                             >
                                 <Icon style={{
-                                    color: idx === 0 ?
+                                    color: ActivePage === option ?
                                         ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
 
                                 }}
                                     strokeWidth={2.5} size={20} />
                                 <span style={{
-                                    color: idx === 0 ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
+                                    color: ActivePage === option ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
                                     fontFamily: Weights.Bold,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
                                 }}>

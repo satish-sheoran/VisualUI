@@ -5,7 +5,7 @@ const DevicePreferences = createSlice({
     name: 'Preferences',
     initialState: {
         Device: window.innerWidth < 768 ? 'Mobile' : window.innerWidth <= 1023 ? 'Tablet' : 'Desktop',
-        Theme: THEMES['Dark'],
+        Theme: THEMES['Light'],
         AnimationTypeNSpeed: AnimationSpeedAndType.find(({ Name }) => Name === 'Normal'),
         AnimationName: AnimationsName.find(({ Name }) => Name === 'Back Out'),
 

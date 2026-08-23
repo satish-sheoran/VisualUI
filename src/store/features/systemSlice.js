@@ -14,7 +14,7 @@ const systemSlice = createSlice({
         },
         setActivePage(state, action) {
             const { newSection } = action.payload;
-            if (!newSection || (newSection !== 'Home' && newSection !== 'Assets' && newSection !== 'Projects' && newSection !== 'Profile')) return;
+            if (!newSection || (newSection !== 'Home' && newSection !== 'Assets' && newSection !== 'Projects' && newSection !== 'Profile' && newSection !=='Settings')) return;
             state.ActivePage = newSection
         }
 
