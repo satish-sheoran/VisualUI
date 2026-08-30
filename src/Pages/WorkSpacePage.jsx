@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ALL_SECTIONS, APP_NAME, USER_MAIL, USER_NAME } from '../constants'
 import * as ICONS from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS, CSS_EASING } from '../constants/style'
 import { toast } from 'react-toastify'
 import { updateTheme } from '../store/features/DevicePreferences'
-import { setActivePage } from '../store/features/systemSlice'
+import { setActivePage, setCurrentPage } from '../store/features/systemSlice'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import Setting from '../components/Settings/Setting'
@@ -31,6 +31,7 @@ const WorkSpacePage = () => {
     const Device = useSelector(store => store.Preferences.Device)
     const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
     const ActivePage = useSelector(store => store.systemSlice.ActivePage)
+    const userDetails = useSelector(store => store.systemSlice.userDetails);
 
     //states 
     const [showBurger, setshowBurger] = useState(false)
@@ -50,6 +51,15 @@ const WorkSpacePage = () => {
             ease: 'sine.out'
         })
     }, [showBurger])
+
+
+    // To check if user is missing then just log out
+    useEffect(() => {
+        if (!userDetails.userName || !userDetails.email || !userDetails.password) {
+            dispatch(setCurrentPage({ newPage: 'GetStartedPage' }))
+            return;
+        }
+    }, [dispatch,userDetails])
 
     return (
         <section className={`relative flex flex-col items-center  select-none w-full h-full overflow-hidden`}>
@@ -189,7 +199,7 @@ const WorkSpacePage = () => {
 
                     {/* user name and img to visit profile */}
                     <div className={`shrink-0 flex items-center gap-3 py-2`}>
-                        {/* <img src="/public/" alt="" /> */}
+                        {/* <img src="/" alt="" /> */}
                         <p
                             onClick={() => toast.info('Adding Soon...')}
                             style={{
@@ -203,20 +213,20 @@ const WorkSpacePage = () => {
 
                         <p
                             onClick={() => toast.info('Adding Soon...')}
-                            className={`active:scale-95 mr-3 flex flex-col`}>
+                            className={`max-w-[55%] active:scale-95 mr-3 flex flex-col`}>
                             <span style={{
                                 color: Theme.primaryText,
                                 fontFamily: Weights.ExtraBold,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
                             }}>
-                                {USER_NAME}
+                                {userDetails.userName ?? 'Error Fetching'}
                             </span>
                             <span style={{
                                 color: Theme.secText,
                                 fontFamily: Weights.Bold,
                                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
                             }}>
-                                {USER_MAIL}
+                                {userDetails.email ?? 'Error!'}
                             </span>
                         </p>
                         <p
@@ -330,7 +340,7 @@ const WorkSpacePage = () => {
                             </button>
                         </div>
                         <div
-                            onClick={() => toast.info('Adding Soon...')}
+                            onClick={() => dispatch(setCurrentPage({ newPage: 'GetStartedPage' }))}
                             style={{
                                 '--hover': Theme.third
                             }} className={`HOVER_CLASS active:scale-97 flex gap-3  items-center rounded-xl px-2.5 py-3 overflow-hidden`} >

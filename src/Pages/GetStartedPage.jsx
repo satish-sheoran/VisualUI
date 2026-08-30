@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import useSwiper from "../hooks/Swiper";
+import { setCurrentPage } from "../store/features/systemSlice";
 
 const GetStartedPage = () => {
 
@@ -71,9 +72,9 @@ const GetStartedPage = () => {
         })
     }, [])
 
-    
+
     // Swipe fn
-    const { Handlers } = useSwiper(50, updateCountRef,directionRef)
+    const { Handlers } = useSwiper(50, updateCountRef, directionRef)
 
 
     useEffect(() => {
@@ -169,20 +170,32 @@ const GetStartedPage = () => {
 
             {/* Buttons */}
             <div className={`py-2 px-[7%] w-full flex flex-col gap-3 items-center justify-center`}>
-                <button onClick={() => clearInterval(countRefInterval.current)} style={{
-                    color: COMMON_COLORS.White,
-                    backgroundColor: COMMON_COLORS.Black,
-                    borderColor: Theme.third,
-                    fontFamily: Weights.ExtraBold,
-                    fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
-                }} className={`active:scale-95 border w-full rounded-2xl py-2`}>Get Started</button>
-                <button onClick={() => clearInterval(countRefInterval.current)} style={{
-                    color: Theme.Theme !== 'Dark' ? Theme.primaryText : COMMON_COLORS.Black,
-                    backgroundColor: COMMON_COLORS.White,
-                    borderColor: THEMES['Light'].third,
-                    fontFamily: Weights.ExtraBold,
-                    fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
-                }} className={`active:scale-95 border w-full rounded-2xl py-2`}>Sign In</button>
+                <button onClick={() => {
+                    clearInterval(countRefInterval.current)
+                    dispatch(setCurrentPage({ newPage: 'SignUpPage' }))
+                }}
+                    style={{
+                        color: COMMON_COLORS.White,
+                        backgroundColor: COMMON_COLORS.Black,
+                        borderColor: Theme.third,
+                        fontFamily: Weights.ExtraBold,
+                        fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
+                    }}
+                    className={`active:scale-95 border w-full rounded-2xl py-2`}>Get Started</button>
+
+                <button
+                    onClick={() => {
+                        clearInterval(countRefInterval.current)
+                        dispatch(setCurrentPage({ newPage: 'LoginPage' }))
+                    }}
+                    style={{
+                        color: Theme.Theme !== 'Dark' ? Theme.primaryText : COMMON_COLORS.Black,
+                        backgroundColor: COMMON_COLORS.White,
+                        borderColor: THEMES['Light'].third,
+                        fontFamily: Weights.ExtraBold,
+                        fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
+                    }} 
+                    className={`active:scale-95 border w-full rounded-2xl py-2`}>Sign In</button>
             </div>
 
         </section>

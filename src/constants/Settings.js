@@ -6,7 +6,7 @@ export const SETTING_SECTIONS = [
         icon: 'Settings',
         desc: 'App preferences & startup',
         options: [
-            'Calculation history',
+           'Calculation history',
             'Theme & appearance',
         ]
     },

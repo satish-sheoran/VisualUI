@@ -1,11 +1,21 @@
-import {  useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { CSS_EASING } from "./constants/style"
 import { useUpdateDevice } from "./utils/DevicePreferencesFN"
 import GetStartedPage from './Pages/GetStartedPage'
 import WorkSpacePage from "./Pages/WorkSpacePage"
 import LoadingInitialPage from './Pages/LoadingInitialPage'
+import SignUpPage from './Pages/SignUpPage'
+import LoginPage from './Pages/LoginPage'
 import { Slide, ToastContainer } from "react-toastify";
+
+const ALL_PAGES = {
+  'GetStartedPage': GetStartedPage,
+  'LoadingInitialPage': LoadingInitialPage,
+  'WorkSpacePage': WorkSpacePage,
+  'SignUpPage': SignUpPage,
+  'LoginPage': LoginPage
+}
 
 const App = () => {
 
@@ -15,6 +25,9 @@ const App = () => {
   const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
+
+  const CurrentPage = useSelector(store => store.systemSlice.CurrentPage)
+  const CurrentPageComponent = ALL_PAGES[CurrentPage]
 
   useUpdateDevice();
 
@@ -29,9 +42,10 @@ const App = () => {
       <div id='layoutParent' style={{ backgroundColor: Theme.bg }} className={`relative`}>
         {Device === 'Mobile' ?
           <>
-            {/* <GetStartedPage /> */}
-            {/* <LoadingInitialPage /> */}
-            <WorkSpacePage />
+            {
+              CurrentPageComponent && <CurrentPageComponent />
+            }
+
           </>
           :
           <div style={{
@@ -51,7 +65,7 @@ const App = () => {
           margin: "0 auto",
           top: '10px',
           backgroundColor: Theme.bg,
-          color : Theme.primaryText
+          color: Theme.primaryText
         }}
         position="top-center"
         autoClose={2500}

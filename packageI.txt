@@ -8,9 +8,10 @@ react-dom
 react-masonry-css 
 react-redux 
 react-toastify
+react-hook-form
+zod 
+@hookform/resolvers
 
 
-
-
-last commit msg :
-feat: add home page and settings UI with dynamic option switching
+current commit msg :
+feat: Add authentication flow and page navigation
