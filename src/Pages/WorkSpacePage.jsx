@@ -59,7 +59,7 @@ const WorkSpacePage = () => {
             dispatch(setCurrentPage({ newPage: 'GetStartedPage' }))
             return;
         }
-    }, [dispatch,userDetails])
+    }, [dispatch, userDetails])
 
     return (
         <section className={`relative flex flex-col items-center  select-none w-full h-full overflow-hidden`}>
@@ -101,7 +101,8 @@ const WorkSpacePage = () => {
                                 <Component />
                             </div>
 
-                        })}                    </div>
+                        })}
+                    </div>
                     {/* footer */}
                     <footer style={{
                         borderColor: Theme.third,

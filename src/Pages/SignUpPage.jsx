@@ -3,6 +3,8 @@ import { ACCENT_COLORS, COMMON_COLORS } from "../constants/style"
 import { useForm } from "react-hook-form"
 import { setCurrentPage, setuserDetails } from "../store/features/systemSlice"
 import { toast } from "react-toastify"
+import { userRegisterSchema } from "../constants/Schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const SignUpPage = () => {
 
@@ -15,7 +17,9 @@ const SignUpPage = () => {
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm()
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver : zodResolver(userRegisterSchema)
+  })
 
   //form submit handler
   const SubmitForm = (data) => {
@@ -63,11 +67,7 @@ const SignUpPage = () => {
             }}
           >Full Name</label>
           <input
-            {...register('fullName', {
-              required: 'User name is required',
-              minLength: { value: 6, message: 'Too short' },
-              maxLength: { value: 20, message: 'Too Long' },
-            })}
+            {...register('fullName')}
             id="fullName"
             name="fullName"
             type="text"
@@ -98,10 +98,7 @@ const SignUpPage = () => {
             }}
           >Email</label>
           <input
-            {...register('email', {
-              required: 'Email is required',
-              minLength: { value: 4, message: 'Too short' },
-            })}
+            {...register('email')}
             id="email"
             name="email"
             type="email"
@@ -134,11 +131,7 @@ const SignUpPage = () => {
             }}
           >Password</label>
           <input
-            {...register('password', {
-              required: 'Password is required',
-              minLength: { value: 6, message: 'Too short password' },
-              maxLength: { value: 30, message: 'Too Long' },
-            })}
+            {...register('password')}
             id="password"
             name="password"
             type="password"

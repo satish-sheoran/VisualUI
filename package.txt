@@ -13,5 +13,7 @@ zod
 @hookform/resolvers
 
 
-current commit msg :
-feat: Add authentication flow and page navigation
+what i did for this commit msg :
+feat : zod schema validation linked to sign up form
+
+- added design of assets sections both section (template and assets)

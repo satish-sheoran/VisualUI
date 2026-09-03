@@ -23,20 +23,20 @@ const LoginPage = () => {
     }
 
     const userExists = res.email === data.email
-    const isPassCorrect = res.password === data.password;
     if (!userExists) {
       toast.error('No Credentials found!')
       return;
     }
-  
+    
+    const isPassCorrect = res.password === data.password;
     if(!isPassCorrect){
       toast.error('Incorrect password!')
       return;
     }
 
     toast.success(`Welcome Back ${res.userName}`)
-    dispatch(setCurrentPage({ newPage: 'WorkSpacePage' }))
     dispatch(setuserDetails({ userName : res.fullName, email : data.email, password : data.password }))
+    dispatch(setCurrentPage({ newPage: 'WorkSpacePage' }))
   }
 
   return (

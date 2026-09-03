@@ -155,7 +155,7 @@ const GetStartedPage = () => {
 
                         {
                             [...GET_STARTED_DATA].map((item, idx) => {
-                                return <p
+                                return <p key={idx}
                                     onClick={() => updateCountRef(idx)}
                                     style={{
                                         backgroundColor: idx === count ? ACCENT_COLORS?.find(({ COLOR }) => COLOR === 'Purple').Hover_Clr : Theme.third
