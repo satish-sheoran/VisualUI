@@ -89,7 +89,6 @@ const Setting = () => {
 
                     {/* changes details */}
                     <div
-
                         ref={(el) => {
                             if (el) {
                                 selectedSectionsDetailRef.current[Section] = el

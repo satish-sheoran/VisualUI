@@ -44,3 +44,25 @@ export const ALL_SECTIONS = [
         FileName : 'Profile'
     }
 ]
+
+
+
+
+
+
+
+
+// Project Detail
+
+// const ProjectDetail = {
+//     id: crypto.randomUUID(),
+//     name: '',
+//     description: '',
+//     createAt: Date.now(),
+//     updatedAt: Date.now(),
+//     canvas: {
+//         width: 250,
+//         height: 250
+//     },
+//     elements: []
+// }

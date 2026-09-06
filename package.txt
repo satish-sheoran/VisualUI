@@ -13,7 +13,26 @@ zod
 @hookform/resolvers
 
 
-what i did for this commit msg :
+what i did for last commit msg :
 feat : zod schema validation linked to sign up form
 
 - added design of assets sections both section (template and assets)
+- Added a Schema constant file which contains all schema used in app
+- Added schema for Sign Up form
+
+
+
+
+ Current work flow done upto 
+
+
+ so jb user new proejc tpe click krega than new proejct ka object bn jata h and uski details save ho jati and we get all details like dsc,title,time created etc, and then passed them to canvas.
+ 2. created desgin of navabr ,footer and options of canvas.
+
+
+Now , we need to create the canvas then the full flow is need to be done
+also options like text-change,text size etc. need to be add.
+
+Suggestion :
+initially in select sevtion : user will see - Select something to get control changes
+then as per type of selected element we will provide the options 

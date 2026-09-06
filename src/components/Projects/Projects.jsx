@@ -1,19 +1,42 @@
 import { useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ACCENT_COLORS } from '../../constants/style'
 import { ChevronsUpDown, Search } from "lucide-react"
+import { setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
 import { toast } from "react-toastify"
+
 const Projects = () => {
 
+  const dispatch = useDispatch();
   const Device = useSelector(store => store.Preferences.Device)
   const Theme = useSelector((store) => store.Preferences.Theme)
   const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
   const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
+  const AllProjects = useSelector(store => store.Canvas.Projects)
+
+  const sharedProjects = AllProjects.filter(({ hasShared }) => hasShared)
 
   const [isFocused, setisFocused] = useState(false)
   const [inputVal, setInputVal] = useState('')
+  const [projectFilter, setProjectFilter] = useState('All')
+
+  // fns
+  function getTimeAgo(timeStamp) {
+
+    const stampGap = Date.now() - timeStamp;
+    const sec = Math.floor(stampGap / 1000)
+    const min = Math.floor(sec / 60)
+    const hr = Math.floor(min / 60)
+    const day = Math.floor(hr / 24)
+
+    if (sec < 60) return 'Few seconds ago'
+    if (min < 60) return `${min} ${min === 1 ? 'min' : 'mins'} ago`
+    if (hr < 24) return `${hr} ${hr === 1 ? 'hr' : 'hrs'} ago`
+    return `${day} ${day === 1 ? 'day' : 'days'} ago`
+
+  } //fn returns how much time before thing is updated (1 min ago) as per providen timeStamp
 
   return (
     <div className={` w-full h-full flex flex-col px-[5%] pt-[5%] gap-4 overflow-hidden`}>
@@ -54,7 +77,7 @@ const Projects = () => {
           ].map(({ ProjectPage }, idx) => {
             return <button
               key={ProjectPage}
-              onClick={() => toast.info('Adding Soon...')}
+              onClick={() => setProjectFilter(ProjectPage)}
               style={{
                 borderColor: Theme.third,
                 color: Theme.primaryText,
@@ -66,7 +89,7 @@ const Projects = () => {
             >
               {ProjectPage}
 
-              <div style={{ borderColor: idx === 0 ? 'red' : 'transparent' }} className={`border absolute bottom-0 left-0 w-full`}></div>
+              <div style={{ borderColor: projectFilter === ProjectPage ? 'red' : 'transparent' }} className={`border absolute bottom-0 left-0 w-full`}></div>
             </button>
           })
         }
@@ -75,93 +98,85 @@ const Projects = () => {
 
       {/* projects */}
       <div className={`grow rounded-2xl w-full flex flex-col gap-4 overflow-y-auto`}>
-        {
-          [
-            {
-              src: '/assets/GetStart1.webp',
-              ProjectName: 'Saas Dashboard',
-              TotalScreens: '12 screens',
-              LastEdit: 'Edited Now'
-            },
-            {
-              src: '/assets/GetStart2.webp',
-              ProjectName: 'Finance App',
-              TotalScreens: '8 screens',
-              LastEdit: '2h ago'
-            },
-            {
-              src: '/assets/GetStart3.webp',
-              ProjectName: 'Portfolio Website',
-              TotalScreens: '6 screens',
-              LastEdit: '1d ago'
-            },
-            {
-              src: '/assets/GetStart4.webp',
-              ProjectName: 'Mobile Banking',
-              TotalScreens: '16 screens',
-              LastEdit: '3d ago'
-            },
-            {
-              src: '/assets/GetStart4.webp',
-              ProjectName: 'Mobile Banking',
-              TotalScreens: '16 screens',
-              LastEdit: '3d ago'
-            },
-            {
-              src: '/assets/GetStart4.webp',
-              ProjectName: 'Mobile Banking',
-              TotalScreens: '16 screens',
-              LastEdit: '3d ago'
-            },
-            {
-              src: '/assets/GetStart4.webp',
-              ProjectName: 'Mobile Banking',
-              TotalScreens: '16 screens',
-              LastEdit: '3d ago'
-            },
-          ].map(({ src, ProjectName, TotalScreens, LastEdit }) => {
-            return <div
-              key={ProjectName}
-              onClick={()=>toast.info('Adding Soon...')}
-              style={{
-                borderColor: Theme.third,
-                backgroundColor: Theme.header
-              }}
-              className={`shrink-0 active:scale-97 px-[5%] py-2 rounded-2xl border w-full flex items-center justify-between gap-4 overflow-hidden`}
-            >
-              <div className={`aspect-square  w-1/5 `}>
-                <img className={`w-full h-full  object-cover object-center`} src={src} alt='img' />
-              </div>
 
-              <div className={`grow flex flex-col`}>
-                <p style={{
-                  color: Theme.primaryText,
-                  fontFamily: Weights.ExtraBold,
-                  fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
-                }}>{ProjectName}</p>
-                <p className={`flex gap-2.5 items-center`}>
-                  <span style={{
-                    color: Theme.secText,
-                    fontFamily: Weights.SemiBold,
-                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-                  }}>{TotalScreens}</span>
-                  <span style={{
-                    color: Theme.secText,
-                    fontFamily: Weights.SemiBold,
-                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-                  }}>{`•  ${LastEdit}`}</span>
-                </p>
-              </div>
 
-              <div className={`flex items-center justify-center`}>
-                <ChevronsUpDown strokeWidth={2.5} size={25} />
-              </div>
-            </div>
-          })
+        {(projectFilter === 'Shared' && sharedProjects.length <= 0) ?
+          <div
+            style={{
+              fontFamily: Weights.SemiBold,
+              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
+              color: Theme.secText
+            }}
+            className={`w-full h-full rounded-2xl flex items-center justify-center`}
+          >No Project has been shared!</div>
+          :
+          <>
+            {
+              AllProjects.length > 0 ?
+                AllProjects.map((Project) => {
+
+                  const timeAgo = getTimeAgo(Project?.updatedAt) // getting times ago it was updated
+
+                  return <div
+                    key={Project?.id}
+                    onClick={() => {
+                      dispatch(setWorkingProject({ project: Project }))
+                      dispatch(setShowCanvas({ showCanvas: true }))
+                    }}
+                    style={{
+                      borderColor: Theme.third,
+                      backgroundColor: Theme.header
+                    }}
+                    className={`shrink-0 active:scale-97 px-[5%] py-2 rounded-2xl border w-full flex items-center justify-between gap-4 overflow-hidden`}
+                  >
+                    <div className={`aspect-square  w-1/5 `}>
+                      <img className={`w-full h-full  object-cover object-center`} src='/assets/GetStart2.webp' alt='img' />
+                    </div>
+
+                    <div className={`grow flex flex-col`}>
+                      <p style={{
+                        color: Theme.primaryText,
+                        fontFamily: Weights.ExtraBold,
+                        fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
+                      }}
+                        className={`break-all select-none line-clamp-1`}
+                      >{Project?.ProjectName}</p>
+                      <span style={{
+                        color: Theme.secText,
+                        fontFamily: Weights.SemiBold,
+                        fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
+                      }}>{`•  ${timeAgo}`}</span>
+                    </div>
+
+                    <div onClick={(e) => {
+                      e.stopPropagation()
+                      toast.info('Adding Soon...')
+                    }} className={`p-1 rounded-full flex items-center justify-center`}>
+                      <ChevronsUpDown strokeWidth={2.5} size={25} />
+                    </div>
+                  </div>
+                })
+                :
+                <div
+                  style={{
+                    fontFamily: Weights.SemiBold,
+                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
+                    color: Theme.secText
+                  }}
+                  className={`w-full h-full rounded-2xl flex items-center justify-center`}
+                >No Project. Start Creating...</div>
+            }
+          </>
         }
+
+
+
+
+
+
       </div>
 
-    </div>
+    </div >
   )
 }
 

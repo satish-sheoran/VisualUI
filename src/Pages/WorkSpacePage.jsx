@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ALL_SECTIONS, APP_NAME, USER_MAIL, USER_NAME } from '../constants'
+import { ALL_SECTIONS, APP_NAME } from '../constants'
 import * as ICONS from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS, CSS_EASING } from '../constants/style'
@@ -13,6 +13,8 @@ import Home from '../components/Home/Home'
 import Assets from '../components/Assets/Assets'
 import Projects from '../components/Projects/Projects'
 import Profile from '../components/Profile/Profile'
+import NewProjectPopUp from '../components/Common/NewProjectPopUp'
+import Canvas from '../canvas/Canvas'
 
 
 const FILES_SECTIONS = {
@@ -28,13 +30,15 @@ const WorkSpacePage = () => {
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
-    const Device = useSelector(store => store.Preferences.Device)
     const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
     const ActivePage = useSelector(store => store.systemSlice.ActivePage)
     const userDetails = useSelector(store => store.systemSlice.userDetails);
+    const showCanvas = useSelector(store => store.Canvas.showCanvas)
+
 
     //states 
     const [showBurger, setshowBurger] = useState(false)
+    const [showNewProjectPopUp, setShowNewProjectPopUp] = useState(false)
 
     //refs
     const HamBurgerRef = useRef(null) // used to animate hamburger 
@@ -103,11 +107,13 @@ const WorkSpacePage = () => {
 
                         })}
                     </div>
+
                     {/* footer */}
                     <footer style={{
                         borderColor: Theme.third,
                         backgroundColor: Theme.header
                     }} className={`border-t p-[2.5%] w-full flex justify-center items-center gap-2`}>
+
                         <div className={` flex gap-2 w-[47%]`}>
                             {
                                 [{
@@ -137,17 +143,19 @@ const WorkSpacePage = () => {
                             }
 
                         </div>
+
                         {/* plus */}
                         <div
-                            onClick={() => toast.info('Adding Soon...')}
+                            onClick={() => setShowNewProjectPopUp(true)}
                             style={{
                                 color: COMMON_COLORS.White,
-                                backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Hover_Clr,
-                                borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                                backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
+                                borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Hover_Clr
                             }}
                             className={`active:scale-95 border rounded-full p-1.5 flex items-center justify-center`}>
                             <ICONS.Plus size={30} strokeWidth={2.5} />
                         </div>
+
                         {/* right side */}
                         <div className={`flex gap-2 w-[47%]`}>
                             {
@@ -176,6 +184,7 @@ const WorkSpacePage = () => {
                                 })
                             }
                         </div>
+
                     </footer>
                 </>
             }
@@ -187,7 +196,7 @@ const WorkSpacePage = () => {
                 onClick={() => setshowBurger(false)}
                 style={{
                     backgroundColor: 'rgba(0,0,0,0.5)'
-                }} className={`${showBurger ? 'block' : 'hidden'} select-none pt-[5%] absolute inset-0 top-0 left-0 z-2`}>
+                }} className={`${showBurger ? 'block' : 'hidden'} select-none pt-[5%] absolute inset-0 top-0 left-0 z-100`}>
 
                 <div
                     ref={HamBurgerRef}
@@ -359,6 +368,20 @@ const WorkSpacePage = () => {
                 </div>
             </section>
 
+
+            {/* Add new project element */}
+            <NewProjectPopUp
+                showNewProjectPopUp={showNewProjectPopUp}
+                setShowNewProjectPopUp={setShowNewProjectPopUp}
+            />
+
+
+            {/* Canvas itself */}
+            {showCanvas && <Canvas
+                showBurger={showBurger}
+                setshowBurger={setshowBurger}
+            />
+            }
 
         </section>
     )

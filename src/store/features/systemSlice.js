@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const systemSlice = createSlice({
     name: 'systemSlice',
     initialState: {
-        userDetails: {},
-        CurrentPage: 'LoadingInitialPage',
+        userDetails: { userName: 'Ram', email : 'ram@gmail.com', password : 'ram12&'},
+        CurrentPage: 'WorkSpacePage',
         ActivePage: 'Home'
     },
     reducers: {
