@@ -37,7 +37,7 @@ const CanvasSlice = createSlice({
         AddProject(state, action) {
             const { project } = action.payload
             if (!project) return;
-            state.Projects = [...state.Projects, project]
+            state.Projects = [project,...state.Projects]
 
             localStorage.setItem('CanvasProject', JSON.stringify([...state.Projects]))
         },

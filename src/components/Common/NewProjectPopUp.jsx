@@ -41,6 +41,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
         reset();
         toast.success(`New Project Created`)
 
+
         const project = {
             // id: crypto.randomUUID(), //problem with it 
             ProjectName,
@@ -188,7 +189,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                             fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
                             fontFamily: Weights.Bold
                         }}
-                        className={`mt-4 border py-2 rounded-2xl active:scale-97`}
+                        className={`mt-2 border py-2 rounded-2xl active:scale-97`}
                     >Create Project</button>
                 </form>
 

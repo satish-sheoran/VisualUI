@@ -1,17 +1,17 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { ACCENT_COLORS } from '../../constants/style'
-import { ChevronsUpDown, Search } from "lucide-react"
+import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
+import { ArrowRight, ChevronsUpDown, ChevronUp, Search } from "lucide-react"
 import { setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
-import { toast } from "react-toastify"
+import gsap from "gsap"
+import { getTimeAgo } from "../../utils/HelperFns"
+import { useGSAP } from "@gsap/react"
 
 const Projects = () => {
 
   const dispatch = useDispatch();
   const Device = useSelector(store => store.Preferences.Device)
   const Theme = useSelector((store) => store.Preferences.Theme)
-  const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-  const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
   const AllProjects = useSelector(store => store.Canvas.Projects)
@@ -22,24 +22,29 @@ const Projects = () => {
   const [inputVal, setInputVal] = useState('')
   const [projectFilter, setProjectFilter] = useState('All')
 
-  // fns
-  function getTimeAgo(timeStamp) {
+  const [expandProjects, setExpandProjects] = useState(() => {
+    if (AllProjects.lenght <= 0) return null
+    return AllProjects.reduce((acc, project) => {
+      acc[project.ProjectName] = true;
+      return acc;
+    }, {}) //used to set value true/false which tells to expand or un-expand the project for additional details
+  })
 
-    const stampGap = Date.now() - timeStamp;
-    const sec = Math.floor(stampGap / 1000)
-    const min = Math.floor(sec / 60)
-    const hr = Math.floor(min / 60)
-    const day = Math.floor(hr / 24)
+  // refs
+  const ProjectDetailRef = useRef({}) // used to animate (show/hide) additional details of project
 
-    if (sec < 60) return 'Few seconds ago'
-    if (min < 60) return `${min} ${min === 1 ? 'min' : 'mins'} ago`
-    if (hr < 24) return `${hr} ${hr === 1 ? 'hr' : 'hrs'} ago`
-    return `${day} ${day === 1 ? 'day' : 'days'} ago`
+  useGSAP(() => {
 
-  } //fn returns how much time before thing is updated (1 min ago) as per providen timeStamp
+    gsap.to(Object.values(ProjectDetailRef.current), {
+      height: 0,
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.out'
+    })
+  }, [])
 
   return (
-    <div className={` w-full h-full flex flex-col px-[5%] pt-[5%] gap-4 overflow-hidden`}>
+    <div className={` w-full h-full flex flex-col px-[5%] pt-[5%] gap-2 overflow-hidden`}>
 
       {/* searchArea */}
       <div
@@ -47,7 +52,7 @@ const Projects = () => {
           backgroundColor: Theme.header, color: Theme.primaryText,
           borderColor: isFocused ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue').CODE : Theme.third
         }}
-        className={`mb-2 border flex gap-2 py-2 rounded-2xl ${Device !== 'Desktop' ? 'px-3' : 'px-2.5'}`}>
+        className={`mb-1 border flex gap-2 py-2 rounded-2xl ${Device !== 'Desktop' ? 'px-3' : 'px-2.5'}`}>
 
         <Search strokeWidth={2.5} size={25} />
         <input
@@ -67,7 +72,7 @@ const Projects = () => {
       </div>
 
       {/* sections - All/Drafts/Shared */}
-      <div className={`flex items-center gap-4`}>
+      <div className={`flex items-center gap-2`}>
         {
           [
             { ProjectPage: 'All' },
@@ -89,7 +94,11 @@ const Projects = () => {
             >
               {ProjectPage}
 
-              <div style={{ borderColor: projectFilter === ProjectPage ? 'red' : 'transparent' }} className={`border absolute bottom-0 left-0 w-full`}></div>
+              <div style={{
+                borderColor: projectFilter === ProjectPage ?
+                  ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                  : 'transparent'
+              }} className={`border absolute bottom-0 left-0 w-full`}></div>
             </button>
           })
         }
@@ -97,7 +106,7 @@ const Projects = () => {
       </div>
 
       {/* projects */}
-      <div className={`grow rounded-2xl w-full flex flex-col gap-4 overflow-y-auto`}>
+      <div className={`grow rounded-2xl w-full flex flex-col gap-2 overflow-y-auto`}>
 
 
         {(projectFilter === 'Shared' && sharedProjects.length <= 0) ?
@@ -116,43 +125,182 @@ const Projects = () => {
                 AllProjects.map((Project) => {
 
                   const timeAgo = getTimeAgo(Project?.updatedAt) // getting times ago it was updated
+                  const date = new Date(Project.createAt)
+                  const creationDate = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })
 
                   return <div
                     key={Project?.id}
                     onClick={() => {
-                      dispatch(setWorkingProject({ project: Project }))
-                      dispatch(setShowCanvas({ showCanvas: true }))
+                      if (expandProjects[Project.ProjectName]) {
+                        gsap.to(ProjectDetailRef.current[Project.ProjectName], {
+                          height: 'auto',
+                          opacity: 1,
+                          duration: 0.3,
+                          ease: 'power2.out'
+                        })
+                        setExpandProjects((prevState) => ({ ...prevState, [Project.ProjectName]: false }));
+                      } else {
+                        gsap.to(ProjectDetailRef.current[Project.ProjectName], {
+                          height: 0,
+                          opacity: 0,
+                          duration: 0.3,
+                          ease: 'power2.out'
+                        })
+                        setExpandProjects((prevState) => ({ ...prevState, [Project.ProjectName]: true }));
+
+                      }
                     }}
                     style={{
                       borderColor: Theme.third,
                       backgroundColor: Theme.header
                     }}
-                    className={`shrink-0 active:scale-97 px-[5%] py-2 rounded-2xl border w-full flex items-center justify-between gap-4 overflow-hidden`}
+                    className={`relative shrink-0 ${expandProjects[Project?.ProjectName] ? 'active:scale-97' : ''} px-[5%] py-2 rounded-2xl border w-full flex flex-col gap-2 overflow-hidden`}
                   >
-                    <div className={`aspect-square  w-1/5 `}>
-                      <img className={`w-full h-full  object-cover object-center`} src='/assets/GetStart2.webp' alt='img' />
+                    <div className={`flex items-center justify-between gap-4`}>
+                      <div className={`aspect-square  w-1/5 `}>
+                        <img className={`w-full h-full  object-cover object-center`} src='/assets/GetStart2.webp' alt='img' />
+                      </div>
+
+                      <div className={`grow flex flex-col`}>
+                        <p style={{
+                          color: Theme.primaryText,
+                          fontFamily: Weights.ExtraBold,
+                          fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
+                        }}
+                          className={`break-all select-none line-clamp-1`}
+                        >{Project?.ProjectName}</p>
+                        <span style={{
+                          color: Theme.secText,
+                          fontFamily: Weights.SemiBold,
+                          fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
+                        }}>{`•  ${timeAgo}`}</span>
+                      </div>
+
+                      <div
+                        className={`p-1 rounded-full flex items-center justify-center`}
+                      >
+                        {expandProjects[Project?.ProjectName] ? <ChevronsUpDown strokeWidth={2.5} size={25} /> : <ChevronUp strokeWidth={2.5} size={25} />}
+                      </div>
                     </div>
 
-                    <div className={`grow flex flex-col`}>
-                      <p style={{
-                        color: Theme.primaryText,
-                        fontFamily: Weights.ExtraBold,
-                        fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
+                    {/* extra info elem */}
+                    <div
+                      ref={(el) => {
+                        if (el) {
+                          ProjectDetailRef.current[Project.ProjectName] = el
+                        } else {
+                          delete ProjectDetailRef.current[Project.ProjectName];
+                        }
                       }}
-                        className={`break-all select-none line-clamp-1`}
-                      >{Project?.ProjectName}</p>
-                      <span style={{
-                        color: Theme.secText,
-                        fontFamily: Weights.SemiBold,
-                        fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-                      }}>{`•  ${timeAgo}`}</span>
-                    </div>
+                      className={`flex flex-col gap-2`}>
+                      <div className={`w-full flex items-center justify-center gap-2`}>
+                        <p
+                          style={{
+                            fontFamily: Weights.Bold,
+                            fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`,
+                            color: Theme.primaryText
+                          }}
+                          className={`min-w-[35%]`}
+                        >Description : </p>
+                        <p
+                          style={{
+                            fontFamily: Weights.SemiBold,
+                            fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                            color: Theme.secText
+                          }}
+                          className={`flex items-center justify-start grow select-none`}>
+                          {Project?.Description === '' ? 'No description added yet.' : Project?.Description}
+                        </p>
+                      </div>
+                      <div className={`flex flex-col gap-0.5`}>
+                        <p className={`flex items-center justify-start gap-4`}>
+                          <span
+                            style={{
+                              fontFamily: Weights.Bold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
+                              color: Theme.primaryText
+                            }}
+                          >Created : </span>
+                          <span
+                            style={{
+                              fontFamily: Weights.SemiBold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                              color: Theme.secText
+                            }}
+                          >{creationDate}</span>
+                        </p>
+                        <p className={`flex items-center justify-start gap-4`}>
+                          <span
+                            style={{
+                              fontFamily: Weights.Bold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
+                              color: Theme.primaryText
+                            }}
+                          >Last updated : </span>
+                          <span
+                            style={{
+                              fontFamily: Weights.SemiBold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                              color: Theme.secText
+                            }}
+                          >5 mins ago</span>
+                        </p>
+                        <p className={`flex items-center justify-start gap-4`}>
+                          <span
+                            style={{
+                              fontFamily: Weights.Bold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
+                              color: Theme.primaryText
+                            }}
+                          >Status : </span>
+                          <span
+                            style={{
+                              fontFamily: Weights.SemiBold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                              color: Theme.secText
+                            }}
+                          >Draft</span>
+                        </p>
+                        <p className={`flex items-center justify-start gap-4`}>
+                          <span
+                            style={{
+                              fontFamily: Weights.Bold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
+                              color: Theme.primaryText
+                            }}
+                          >Visibility : </span>
+                          <span
+                            style={{
+                              fontFamily: Weights.SemiBold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                              color: Theme.secText
+                            }}
+                          >Private</span>
+                        </p>
 
-                    <div onClick={(e) => {
-                      e.stopPropagation()
-                      toast.info('Adding Soon...')
-                    }} className={`p-1 rounded-full flex items-center justify-center`}>
-                      <ChevronsUpDown strokeWidth={2.5} size={25} />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            dispatch(setWorkingProject({ project: Project }))
+                            dispatch(setShowCanvas({ showCanvas: true }))
+                          }}
+                          style={{
+                            fontFamily: Weights.Bold,
+                            fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`,
+                            color: COMMON_COLORS.White,
+                            backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
+                            borderColor: Theme.third
+                          }}
+                          className={`self-end active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
+                        >
+                          <span>Open Project</span>
+                          <ArrowRight strokeWidth={2.5} size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 })

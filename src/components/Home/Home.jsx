@@ -1,9 +1,10 @@
-import { useSelector } from "react-redux"
-import { USER_NAME } from '../../constants/index'
-import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import * as Icons from 'lucide-react'
 import { ACCENT_COLORS } from '../../constants/style'
 import { toast } from "react-toastify"
+import { getTimeAgo } from "../../utils/HelperFns"
+import { setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
+import { setActivePage } from "../../store/features/systemSlice"
 
 const Tools = [
   {
@@ -21,20 +22,16 @@ const Tools = [
 
 ]
 
-const Home = () => {
+const Home = ({setShowNewProjectPopUp}) => {
 
-  const Device = useSelector(store => store.Preferences.Device)
+  const dispatch = useDispatch()
   const Theme = useSelector((store) => store.Preferences.Theme)
-  const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-  const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
   const userDetails = useSelector(store => store.systemSlice.userDetails);
+  const AllProjects = useSelector(store => store.Canvas.Projects)
 
-  // states
-  // temporary state for now
-  const [RecentProjects, setRecentProjects] = useState([])
-
+  const RecentProjects = [...AllProjects].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3)
 
   return (
     <div className={`w-full h-full overflow-y-auto overflow-x-hidden pt-[2.5%]`}>
@@ -56,7 +53,7 @@ const Home = () => {
 
         {/* new project +  Templates */}
         <div className={`shrink-0 flex items-center gap-3`}>
-          <div onClick={() => toast.info('Adding Soon...')}
+          <div onClick={() => setShowNewProjectPopUp(true)}
             style={{
               backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
               borderColor: Theme.third,
@@ -77,7 +74,7 @@ const Home = () => {
             }}>Start from scratch</span>
           </div>
 
-          <div onClick={() => toast.info('Adding Soon...')} style={{
+          <div onClick={() => dispatch(setActivePage({newSection : 'Assets'}))} style={{
             backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
             borderColor: Theme.third,
           }}
@@ -99,47 +96,65 @@ const Home = () => {
         </div>
 
         {/* recent projects */}
-        <div className={`shrink-0 flex flex-col gap-3`}>
+        <div className={`w-full shrink-0 flex flex-col gap-3`}>
           {/* title and see all button */}
-          <div className={`flex items-center justify-between`}>
+          <div className={`w-fullflex items-center justify-between`}>
             <p style={{
               color: Theme.primaryText,
               fontFamily: Weights.ExtraBold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
             }}>Recent Projects</p>
-            {RecentProjects.length > 0 && <p
-              onClick={() => toast.info('Adding Soon...')}
+            {AllProjects.length > 0 && <p
+              onClick={() => dispatch(setActivePage({newSection : 'Projects'}))}
               style={{
                 color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-              }}>See All</p>}
+              }} 
+              className="active:scale-95"
+              >See All</p>}
           </div>
 
           {/* projects old */}
-          <div className={`flex overflow-x-auto items-center gap-3`}>
-            {RecentProjects.length > 0 ? RecentProjects.map(({ ProjectName, LastEdited }) => {
-              return <div key={ProjectName}
+          <div className={`w-full flex flex-col items-center gap-1.5`}>
+            {RecentProjects.length > 0 ? RecentProjects.map((Project) => {
+
+              const timeAgo = getTimeAgo(Project.updatedAt) // getting times ago it was updated
+
+              return <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  dispatch(setWorkingProject({ project: Project }))
+                  dispatch(setShowCanvas({ showCanvas: true }))
+                }}
                 style={{
                   borderColor: Theme.third,
                   backgroundColor: Theme.header
                 }}
-                className={`p-[3%] shrink-0 border w-1/2 flex flex-col gap-1 items-center justify-center aspect-square rounded-2xl overflow-hidden`}
-              >
-                <div className={`w-8/10 h-fit overflow-hidden`}>
-                  <img className={`w-full object-cover object-center`} src="/assets/GetStart2.webp" alt="Img" />
+                className={`active:scale-95 p-2 rounded-2xl border w-full flex items-center justify-between gap-4`}>
+                <div className={`aspect-square w-[12%] `}>
+                  <img className={`w-full h-full  object-cover object-center`} src='/assets/GetStart2.webp' alt='img' />
                 </div>
-                <div className={`w-full flex flex-col`}>
+
+                <div className={`grow flex flex-col`}>
                   <p style={{
                     color: Theme.primaryText,
-                    fontFamily: Weights.Bold,
-                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
-                  }}>{ProjectName}</p>
+                    fontFamily: Weights.ExtraBold,
+                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
+                  }}
+                    className={`break-all select-none line-clamp-1`}
+                  >{Project.ProjectName}</p>
                   <span style={{
                     color: Theme.secText,
                     fontFamily: Weights.SemiBold,
-                    fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                  }}>{LastEdited}</span>
+                    fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
+                  }}>{`•  ${timeAgo}`}</span>
+                </div>
+
+                <div
+                  className={`p-1 rounded-full flex items-center justify-center`}
+                >
+                  <Icons.ChevronRight strokeWidth={2.5} size={25} />
                 </div>
               </div>
             }) :

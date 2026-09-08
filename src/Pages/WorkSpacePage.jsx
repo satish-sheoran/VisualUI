@@ -102,7 +102,7 @@ const WorkSpacePage = () => {
                             const Component = FILES_SECTIONS[FileName]
 
                             return Component && Section === ActivePage && <div key={Section} className={`w-full h-full overflow-hidden`}>
-                                <Component />
+                                <Component setShowNewProjectPopUp={setShowNewProjectPopUp} />
                             </div>
 
                         })}

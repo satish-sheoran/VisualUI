@@ -11,8 +11,6 @@ const Setting = () => {
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
     const Device = useSelector(store => store.Preferences.Device)
-    const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-    const ActivePage = useSelector(store => store.systemSlice.ActivePage)
 
     // states
     const [openOptions, setOpenOptions] = useState(() => {
@@ -21,6 +19,7 @@ const Setting = () => {
             return acc;
         }, {})
     }); //used to show/hide reset details
+
     // refs
     const selectedSectionsDetailRef = useRef({})
 
@@ -81,9 +80,9 @@ const Setting = () => {
                                 }}>{desc}</span>
                             </p>
                         </div>
-                        { openOptions[Section] ?<ICONS.ChevronDown style={{ color: Theme.primaryText }} strokeWidth={2.5} size={20} />
-                        :
-                        <ICONS.ChevronUp style={{ color: Theme.primaryText }} strokeWidth={2.5} size={20} />
+                        {openOptions[Section] ? <ICONS.ChevronDown style={{ color: Theme.primaryText }} strokeWidth={2.5} size={20} />
+                            :
+                            <ICONS.ChevronUp style={{ color: Theme.primaryText }} strokeWidth={2.5} size={20} />
                         }
                     </div>
 
@@ -95,7 +94,8 @@ const Setting = () => {
                             } else {
                                 delete selectedSectionsDetailRef.current[Section];
                             }
-                        }} style={{ backgroundColor: Theme.header, borderColor: Theme.third }}
+                        }}
+                        style={{ backgroundColor: Theme.header, borderColor: Theme.third }}
                         className={`overflow-hidden border-t  flex gap-2 justify-between items-center ${Device !== 'Desktop' ? `p-3` : `p-2.5`}`}>
                         <div style={{
                             fontSize: `${(Sizes.ExtraSmall.slice(0, -3)) * 1.2}rem`,
