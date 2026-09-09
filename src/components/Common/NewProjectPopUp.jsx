@@ -15,10 +15,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
-    const Device = useSelector(store => store.Preferences.Device)
-    const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-    const ActivePage = useSelector(store => store.systemSlice.ActivePage)
-    const userDetails = useSelector(store => store.systemSlice.userDetails);
+    const AllProjects = useSelector(store => store.Canvas.Projects)
 
     // refs
     const refElem = useRef(null)
@@ -40,15 +37,25 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
         const date = new Date()
         reset();
         toast.success(`New Project Created`)
+        let id;
+        let idExists;
 
+        do {
+            // 1. Generate the ID
+            id = Math.random().toString(36).substring(2, 9) + date.getTime().toString(36);
+
+            // 2. Check if it already exists in the array
+            idExists = AllProjects.some(({ id: ID }) => ID === id);
+
+        } while (idExists); // 3. Loop repeats only if a duplicate was found
 
         const project = {
-            // id: crypto.randomUUID(), //problem with it 
+            id,
             ProjectName,
             Description,
             createAt: date.getTime(),
             updatedAt: date.getTime(),
-            hasShared : false,
+            isFavourite: false,
             canvas: {
                 width: 250,
                 height: 250

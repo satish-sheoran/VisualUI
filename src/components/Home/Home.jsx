@@ -98,7 +98,7 @@ const Home = ({setShowNewProjectPopUp}) => {
         {/* recent projects */}
         <div className={`w-full shrink-0 flex flex-col gap-3`}>
           {/* title and see all button */}
-          <div className={`w-fullflex items-center justify-between`}>
+          <div className={`w-full flex items-center justify-between`}>
             <p style={{
               color: Theme.primaryText,
               fontFamily: Weights.ExtraBold,
@@ -154,7 +154,7 @@ const Home = ({setShowNewProjectPopUp}) => {
                 <div
                   className={`p-1 rounded-full flex items-center justify-center`}
                 >
-                  <Icons.ChevronRight strokeWidth={2.5} size={25} />
+                  <Icons.ChevronRight style={{color : Theme.primaryText}} strokeWidth={2.5} size={25} />
                 </div>
               </div>
             }) :
@@ -180,7 +180,7 @@ const Home = ({setShowNewProjectPopUp}) => {
               return <div key={Name}
                 onClick={() => toast.info('Adding Soon...')}
                 style={{
-                  backgroundColor: Theme.sec,
+                  backgroundColor: Theme.header,
                   borderColor: Theme.third
                 }}
                 className={`border active:scale-97 aspect-square rounded-2xl overflow-hidden flex flex-col items-center justify-center`}

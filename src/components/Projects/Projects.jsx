@@ -1,11 +1,13 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
-import { ArrowRight, ChevronsUpDown, ChevronUp, Search } from "lucide-react"
-import { setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
+import { ArrowRight, ChevronsUpDown, ChevronUp, Heart, Search } from "lucide-react"
+import { AddToFavourite, setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
 import gsap from "gsap"
 import { getTimeAgo } from "../../utils/HelperFns"
 import { useGSAP } from "@gsap/react"
+import { UseDebouncer } from "../../hooks/Debounce"
+import { toast } from "react-toastify"
 
 const Projects = () => {
 
@@ -16,11 +18,12 @@ const Projects = () => {
   const { Weights } = useSelector(store => store.Preferences.Font);
   const AllProjects = useSelector(store => store.Canvas.Projects)
 
-  const sharedProjects = AllProjects.filter(({ hasShared }) => hasShared)
+  const FavouriteProjects = AllProjects.filter(({ isFavourite }) => isFavourite)
 
   const [isFocused, setisFocused] = useState(false)
   const [inputVal, setInputVal] = useState('')
   const [projectFilter, setProjectFilter] = useState('All')
+  const [searchedProjects, setSearchedProjects] = useState(AllProjects ?? [])
 
   const [expandProjects, setExpandProjects] = useState(() => {
     if (AllProjects.lenght <= 0) return null
@@ -29,6 +32,19 @@ const Projects = () => {
       return acc;
     }, {}) //used to set value true/false which tells to expand or un-expand the project for additional details
   })
+
+  const debouncedValue = UseDebouncer(inputVal, 300)
+
+  useEffect(() => {
+    const searchVal = debouncedValue.trim();
+    if (searchVal === '') {
+      setSearchedProjects(AllProjects);
+      return
+    }
+
+    setSearchedProjects(() => AllProjects.filter(({ ProjectName }) => ProjectName.startsWith(debouncedValue) ?? [])
+    )
+  }, [debouncedValue, projectFilter,AllProjects])
 
   // refs
   const ProjectDetailRef = useRef({}) // used to animate (show/hide) additional details of project
@@ -71,15 +87,15 @@ const Projects = () => {
         />
       </div>
 
-      {/* sections - All/Drafts/Shared */}
+      {/* sections - All/Drafts/Favourite */}
       <div className={`flex items-center gap-2`}>
         {
           [
             { ProjectPage: 'All' },
             { ProjectPage: 'Drafts' },
-            { ProjectPage: 'Shared' },
+            { ProjectPage: 'Favourites' },
 
-          ].map(({ ProjectPage }, idx) => {
+          ].map(({ ProjectPage }) => {
             return <button
               key={ProjectPage}
               onClick={() => setProjectFilter(ProjectPage)}
@@ -109,7 +125,7 @@ const Projects = () => {
       <div className={`grow rounded-2xl w-full flex flex-col gap-2 overflow-y-auto`}>
 
 
-        {(projectFilter === 'Shared' && sharedProjects.length <= 0) ?
+        {(projectFilter === 'Favourites' && FavouriteProjects.length <= 0) ?
           <div
             style={{
               fontFamily: Weights.SemiBold,
@@ -117,12 +133,12 @@ const Projects = () => {
               color: Theme.secText
             }}
             className={`w-full h-full rounded-2xl flex items-center justify-center`}
-          >No Project has been shared!</div>
+          >No Project has been added to Favourites!</div>
           :
           <>
             {
-              AllProjects.length > 0 ?
-                AllProjects.map((Project) => {
+              searchedProjects.length > 0 ?
+                searchedProjects.map((Project) => {
 
                   const timeAgo = getTimeAgo(Project?.updatedAt) // getting times ago it was updated
                   const date = new Date(Project.createAt)
@@ -131,7 +147,7 @@ const Projects = () => {
                     day: 'numeric',
                     year: 'numeric'
                   })
-
+                  if (projectFilter === 'Favourites' && !Project.isFavourite) return;
                   return <div
                     key={Project?.id}
                     onClick={() => {
@@ -181,6 +197,9 @@ const Projects = () => {
                       </div>
 
                       <div
+                        style={{
+                          color: Theme.primaryText
+                        }}
                         className={`p-1 rounded-full flex items-center justify-center`}
                       >
                         {expandProjects[Project?.ProjectName] ? <ChevronsUpDown strokeWidth={2.5} size={25} /> : <ChevronUp strokeWidth={2.5} size={25} />}
@@ -247,7 +266,7 @@ const Projects = () => {
                               fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
                               color: Theme.secText
                             }}
-                          >5 mins ago</span>
+                          >{timeAgo?.trim()?.slice(8)}</span>
                         </p>
                         <p className={`flex items-center justify-start gap-4`}>
                           <span
@@ -281,25 +300,46 @@ const Projects = () => {
                             }}
                           >Private</span>
                         </p>
-
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            dispatch(setWorkingProject({ project: Project }))
-                            dispatch(setShowCanvas({ showCanvas: true }))
-                          }}
-                          style={{
-                            fontFamily: Weights.Bold,
-                            fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`,
-                            color: COMMON_COLORS.White,
-                            backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
-                            borderColor: Theme.third
-                          }}
-                          className={`self-end active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
-                        >
-                          <span>Open Project</span>
-                          <ArrowRight strokeWidth={2.5} size={16} />
-                        </button>
+                        <div className={`w-full flex justify-between items-center`}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dispatch(AddToFavourite({ id: Project.id, shouldAdd: Project.isFavourite ? false : true }))
+                            }}
+                            style={{
+                              color: Project.isFavourite ?
+                                ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').CODE
+                                : Theme.primaryText
+                            }}
+                            className={`p-1.5 rounded-full`}>
+                            <Heart
+                              fill={Project.isFavourite ?
+                                ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').CODE
+                                : 'none'
+                              }
+                              strokeWidth={2}
+                              size={20}
+                            />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              dispatch(setWorkingProject({ project: Project }))
+                              dispatch(setShowCanvas({ showCanvas: true }))
+                            }}
+                            style={{
+                              fontFamily: Weights.Bold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`,
+                              color: COMMON_COLORS.White,
+                              backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
+                              borderColor: Theme.third
+                            }}
+                            className={`self-end active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
+                          >
+                            <span>Open Project</span>
+                            <ArrowRight strokeWidth={2.5} size={16} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

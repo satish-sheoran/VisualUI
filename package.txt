@@ -14,13 +14,11 @@ zod
 
 
 what i did for this commit :
-feat: add project details, animations, and recent projects functionality
+Add debounced project search and favourites functionality
 
-- Added additional project details in the Projects section.
-- Added animations and an option to open projects directly in the canvas on these projects.
-- Added functionality for New Project and Templates buttons on the Home page.
-- Added Recent Projects section with See All functionality.
-
+- Create debounced function for search input
+- Add project search functionality
+- Add ability to add/remove projects from favourites
 
 Suggestion :
 1. initially in select sevtion : user will see - Select something to get control changes

@@ -1,16 +1,16 @@
 import * as Icons from 'lucide-react'
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { toast } from 'react-toastify'
+import { setCurrentPage, setActivePage } from '../../store/features/systemSlice'
 
 const Profile = () => {
 
-  const Device = useSelector(store => store.Preferences.Device)
+  const dispatch = useDispatch()
   const Theme = useSelector((store) => store.Preferences.Theme)
-  const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-  const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
   const userDetails = useSelector(store => store.systemSlice.userDetails);
+  const Projects = useSelector(store => store.Canvas.Projects)
 
 
   return (
@@ -63,7 +63,7 @@ const Profile = () => {
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
               }}
-            >12</span>
+            >{Projects.length}</span>
             <span
               style={{
                 color: Theme.secText,
@@ -79,7 +79,7 @@ const Profile = () => {
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
               }}
-            >5</span>
+            >0</span>
             <span
               style={{
                 color: Theme.secText,
@@ -95,50 +95,63 @@ const Profile = () => {
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
               }}
-            >12k +</span>
+            >{Projects.filter(({ isFavourite }) => isFavourite)?.length}</span>
             <span
               style={{
                 color: Theme.secText,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
               }}
-            >Likes</span>
+            >Favourites</span>
           </p>
         </div>
 
         {/* options */}
         <div style={{
-          borderColor : Theme.third,
-          backgroundColor : Theme.header
+          borderColor: Theme.third,
+          backgroundColor: Theme.header
         }} className={`border rounded-2xl px-2.5 py-3 flex flex-col items-center gap-2`}>
           {
             [
               {
                 icon: 'FolderKanban',
                 option: 'My Projects',
-                openAble: true
+                openAble: true,
+                performAction: () => {
+                  dispatch(setActivePage({ newSection: 'Projects' }))
+                }
               },
               {
                 icon: 'Heart',
                 option: 'Favourites',
-                openAble: true
+                openAble: true,
+                performAction: () => {
+                  dispatch(setActivePage({ newSection: 'Projects' }))
+                }
               },
               {
                 icon: 'BadgeQuestionMark',
                 option: 'Help & Support',
-                openAble: true
+                openAble: true,
+                performAction: () => {
+                  toast.info('Adding Soon...')
+                }
               },
               {
                 icon: 'LogOut',
                 option: 'Log out',
-                openAble: false
+                openAble: false,
+                performAction: () => {
+                  dispatch(setCurrentPage({ newPage: 'GetStartedPage' }))
+                }
               },
-            ].map(({ icon, option, openAble }) => {
+            ].map(({ icon, option, openAble, performAction }) => {
               const Icon = Icons[icon]
               return <div key={option}
-              onClick={()=>toast.error('Adding Soon...')}
+                onClick={() => performAction()}
                 style={{
-                  borderColor : Theme.third,
+                  color: Theme.primaryText,
+                  borderColor: Theme.third,
                   '--hover': Theme.third
                 }}
                 className={`HOVER_CLASS active:scale-97  w-full rounded-2xl flex items-center justify-between`}>
