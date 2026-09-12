@@ -211,18 +211,23 @@ const WorkSpacePage = () => {
                     <div className={`shrink-0 flex items-center gap-3 py-2`}>
                         {/* <img src="/" alt="" /> */}
                         <p
-                            onClick={() => toast.info('Adding Soon...')}
+                            onClick={() => {
+                                dispatch(setActivePage({ newSection: 'Profile' }))
+                                setshowBurger(false)
+                            }}
                             style={{
                                 backgroundColor: Theme.sec,
                                 borderColor: Theme.third,
                                 color: Theme.primaryText
                             }}
-                            className={`active:scale-95 border flex items-center justify-center p-1 rounded-full overflow-hidden`}>
+                            className={`border active:scale-95 border flex items-center justify-center p-1 rounded-full overflow-hidden`}>
                             <ICONS.User size={25} strokeWidth={2.5} />
                         </p>
-
                         <p
-                            onClick={() => toast.info('Adding Soon...')}
+                            onClick={() => {
+                                dispatch(setActivePage({ newSection: 'Profile' }))
+                                setshowBurger(false)
+                            }}
                             className={`max-w-[55%] active:scale-95 mr-3 flex flex-col`}>
                             <span style={{
                                 color: Theme.primaryText,

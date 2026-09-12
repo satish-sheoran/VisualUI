@@ -14,11 +14,7 @@ zod
 
 
 what i did for this commit :
-Add debounced project search and favourites functionality
-
-- Create debounced function for search input
-- Add project search functionality
-- Add ability to add/remove projects from favourites
+feat : Added project editing feature and validation
 
 Suggestion :
 1. initially in select sevtion : user will see - Select something to get control changes

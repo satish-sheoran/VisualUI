@@ -138,6 +138,14 @@ const Profile = () => {
                 }
               },
               {
+                icon: 'Settings',
+                option: 'Settings',
+                openAble: true,
+                performAction: () => {  
+                  dispatch(setActivePage({ newSection: 'Settings' }))
+                }
+                },
+              {
                 icon: 'LogOut',
                 option: 'Log out',
                 openAble: false,

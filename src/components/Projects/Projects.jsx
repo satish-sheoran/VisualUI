@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
-import { ArrowRight, ChevronsUpDown, ChevronUp, Heart, Search } from "lucide-react"
-import { AddToFavourite, setShowCanvas, setWorkingProject } from "../../store/features/Canvas"
+import { ArrowRight, ChevronsUpDown, ChevronUp, Heart, Pencil, Search } from "lucide-react"
+import { AddToFavourite, setShowCanvas, setWorkingProject, UpdateProjectDetails } from "../../store/features/Canvas"
 import gsap from "gsap"
 import { getTimeAgo } from "../../utils/HelperFns"
 import { useGSAP } from "@gsap/react"
@@ -20,20 +20,30 @@ const Projects = () => {
 
   const FavouriteProjects = AllProjects.filter(({ isFavourite }) => isFavourite)
 
-  const [isFocused, setisFocused] = useState(false)
-  const [inputVal, setInputVal] = useState('')
-  const [projectFilter, setProjectFilter] = useState('All')
-  const [searchedProjects, setSearchedProjects] = useState(AllProjects ?? [])
-
+  // states
+  const [isFocused, setisFocused] = useState(false) // is search input focused
+  const [inputVal, setInputVal] = useState('') // input box value
+  const [projectFilter, setProjectFilter] = useState('All') // which section is action (all,drafts or favourites)
+  const [searchedProjects, setSearchedProjects] = useState(AllProjects ?? []) // result,if user has searched something then search result else all projects as per section/fliter
   const [expandProjects, setExpandProjects] = useState(() => {
     if (AllProjects.lenght <= 0) return null
     return AllProjects.reduce((acc, project) => {
       acc[project.ProjectName] = true;
       return acc;
     }, {}) //used to set value true/false which tells to expand or un-expand the project for additional details
+  }) //expand project to show additional details (description etc.)
+  const [EditProjects, setEditProjects] = useState(() => {
+    if (AllProjects.lenght <= 0) return null
+    return AllProjects.reduce((acc, project) => {
+      acc[project.ProjectName] = false;
+      return acc;
+    }, {}) //used to set value true/false which tells to open edit mode 
   })
+  const debouncedValue = UseDebouncer(inputVal, 300) //debounce searching
 
-  const debouncedValue = UseDebouncer(inputVal, 300)
+  // refs
+  const ProjectRef = useRef({})
+  const ProjectDetailRef = useRef({}) // used to animate (show/hide) additional details of project
 
   useEffect(() => {
     const searchVal = debouncedValue.trim();
@@ -44,11 +54,9 @@ const Projects = () => {
 
     setSearchedProjects(() => AllProjects.filter(({ ProjectName }) => ProjectName.startsWith(debouncedValue) ?? [])
     )
-  }, [debouncedValue, projectFilter,AllProjects])
+  }, [debouncedValue, projectFilter, AllProjects])
 
-  // refs
-  const ProjectDetailRef = useRef({}) // used to animate (show/hide) additional details of project
-
+  // intial animation
   useGSAP(() => {
 
     gsap.to(Object.values(ProjectDetailRef.current), {
@@ -57,7 +65,13 @@ const Projects = () => {
       duration: 0.3,
       ease: 'power2.out'
     })
-  }, [])
+    setExpandProjects(() => {
+      return AllProjects.reduce((acc, project) => {
+        acc[project.ProjectName] = true;
+        return acc;
+      }, {})
+    })
+  }, [projectFilter])
 
   return (
     <div className={` w-full h-full flex flex-col px-[5%] pt-[5%] gap-2 overflow-hidden`}>
@@ -98,7 +112,18 @@ const Projects = () => {
           ].map(({ ProjectPage }) => {
             return <button
               key={ProjectPage}
-              onClick={() => setProjectFilter(ProjectPage)}
+              onClick={() => {
+                if (ProjectPage !== projectFilter) {
+                  setEditProjects(() => {
+                    return AllProjects.reduce((acc, project) => {
+                      acc[project.ProjectName] = false;
+                      return acc;
+                    }, {})
+                  })
+                }
+                setProjectFilter(ProjectPage)
+              }
+              }
               style={{
                 borderColor: Theme.third,
                 color: Theme.primaryText,
@@ -166,8 +191,18 @@ const Projects = () => {
                           duration: 0.3,
                           ease: 'power2.out'
                         })
+                        setEditProjects((old) => {
+                          return { ...old, [Project.ProjectName]: false }
+                        })
                         setExpandProjects((prevState) => ({ ...prevState, [Project.ProjectName]: true }));
 
+                      }
+                    }}
+                    ref={(el) => {
+                      if (el) {
+                        ProjectRef.current[Project.ProjectName] = el
+                      } else {
+                        delete ProjectRef.current[Project.ProjectName];
                       }
                     }}
                     style={{
@@ -182,13 +217,31 @@ const Projects = () => {
                       </div>
 
                       <div className={`grow flex flex-col`}>
-                        <p style={{
-                          color: Theme.primaryText,
-                          fontFamily: Weights.ExtraBold,
-                          fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
-                        }}
-                          className={`break-all select-none line-clamp-1`}
-                        >{Project?.ProjectName}</p>
+                        {
+                          EditProjects[Project.ProjectName] ?
+                            <input
+                              onClick={(e) => {
+                                e.stopPropagation()
+                              }}
+                              defaultValue={Project?.ProjectName || ''}
+                              placeholder="Project name is required!"
+                              maxLength={50}
+                              style={{
+                                fontFamily: Weights.Bold,
+                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                                color: Theme.secText,
+                                borderColor: Theme.third
+                              }}
+                              className={`border rounded-lg mb-1 p-1`}
+                            />
+                            : <p style={{
+                              color: Theme.primaryText,
+                              fontFamily: Weights.ExtraBold,
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
+                            }}
+                              className={`break-all select-none line-clamp-1`}
+                            >{Project?.ProjectName}</p>
+                        }
                         <span style={{
                           color: Theme.secText,
                           fontFamily: Weights.SemiBold,
@@ -225,82 +278,125 @@ const Projects = () => {
                           }}
                           className={`min-w-[35%]`}
                         >Description : </p>
-                        <p
-                          style={{
-                            fontFamily: Weights.SemiBold,
-                            fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                            color: Theme.secText
-                          }}
-                          className={`flex items-center justify-start grow select-none`}>
-                          {Project?.Description === '' ? 'No description added yet.' : Project?.Description}
-                        </p>
+                        {
+                          EditProjects[Project.ProjectName] ?
+                            <textarea
+                              onClick={(e) => {
+                                e.stopPropagation()
+                              }}
+                              name={Project.ProjectName}
+                              id={Project.id}
+                              placeholder="No description added yet"
+                              defaultValue={Project?.Description || ''}
+                              maxLength={300}
+                              style={{
+                                fontFamily: Weights.SemiBold,
+                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                                color: Theme.secText,
+                                borderColor: Theme.third
+                              }}
+                              className={`px-2 grow border rounded-xl`}
+                            ></textarea>
+                            : <p
+                              style={{
+                                fontFamily: Weights.SemiBold,
+                                fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                                color: Theme.secText
+                              }}
+                              className={`flex items-center justify-start grow select-none`}>
+                              {Project?.Description === '' ? 'No description added yet.' : Project?.Description}
+                            </p>
+                        }
                       </div>
                       <div className={`flex flex-col gap-0.5`}>
-                        <p className={`flex items-center justify-start gap-4`}>
-                          <span
+                        {
+                          [
+                            {
+                              InfoName: 'Created : ',
+                              InfoVal: creationDate
+                            },
+                            {
+                              InfoName: 'Last updated : ',
+                              InfoVal: timeAgo?.trim()?.slice(8)
+                            },
+                            {
+                              InfoName: 'Status : ',
+                              InfoVal: 'Draft'
+                            },
+                            {
+                              InfoName: 'Visibility : ',
+                              InfoVal: 'Private'
+                            }
+                          ].map(({ InfoName, InfoVal }) => {
+                            return <p className={`flex items-center justify-start gap-4`}>
+                              <span
+                                style={{
+                                  fontFamily: Weights.Bold,
+                                  fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
+                                  color: Theme.primaryText
+                                }}
+                              >{InfoName}</span>
+                              <span
+                                style={{
+                                  fontFamily: Weights.SemiBold,
+                                  fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
+                                  color: Theme.secText
+                                }}
+                              >{InfoVal}</span>
+                            </p>
+                          })
+                        }
+                        <div className={`mt-1.5 relative w-full flex gap-2 items-center`}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (EditProjects[Project?.ProjectName]) {
+                                // code to check if the project name is empty ""
+                                const projectNameVal = ProjectRef.current[Project.ProjectName]
+                                  ?.querySelector('input')
+                                  ?.value;
+                                if (projectNameVal.trim() === '') {
+                                  toast.error("Project must have a name!");
+                                  return;
+                                }
+
+                                // closing editing mode
+                                setEditProjects((old) => {
+                                  return { ...old, [Project.ProjectName]: false }
+                                })
+
+                                // checking description and project name iif they are still same and then dispatch
+                                const Descvalue =
+                                  ProjectDetailRef.current[Project.ProjectName]
+                                    ?.querySelector('textarea')
+                                    ?.value
+                                if (Descvalue.trim() === Project?.Description.trim() && projectNameVal.trim() === Project?.ProjectName.trim()) return;
+                                dispatch(UpdateProjectDetails({ id: Project?.id, desc: Descvalue, projectName: projectNameVal }))
+                                setSearchedProjects(AllProjects);
+
+                              } else {
+                                setEditProjects((old) => {
+                                  return { ...old, [Project.ProjectName]: true }
+                                })
+                              }
+                            }}
                             style={{
                               fontFamily: Weights.Bold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
-                              color: Theme.primaryText
+                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
+                              color: EditProjects[Project?.ProjectName] ? COMMON_COLORS.White : Theme.primaryText,
+                              backgroundColor: EditProjects[Project?.ProjectName] ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : '',
+                              borderColor: Theme.third
                             }}
-                          >Created : </span>
-                          <span
-                            style={{
-                              fontFamily: Weights.SemiBold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                              color: Theme.secText
-                            }}
-                          >{creationDate}</span>
-                        </p>
-                        <p className={`flex items-center justify-start gap-4`}>
-                          <span
-                            style={{
-                              fontFamily: Weights.Bold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
-                              color: Theme.primaryText
-                            }}
-                          >Last updated : </span>
-                          <span
-                            style={{
-                              fontFamily: Weights.SemiBold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                              color: Theme.secText
-                            }}
-                          >{timeAgo?.trim()?.slice(8)}</span>
-                        </p>
-                        <p className={`flex items-center justify-start gap-4`}>
-                          <span
-                            style={{
-                              fontFamily: Weights.Bold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
-                              color: Theme.primaryText
-                            }}
-                          >Status : </span>
-                          <span
-                            style={{
-                              fontFamily: Weights.SemiBold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                              color: Theme.secText
-                            }}
-                          >Draft</span>
-                        </p>
-                        <p className={`flex items-center justify-start gap-4`}>
-                          <span
-                            style={{
-                              fontFamily: Weights.Bold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
-                              color: Theme.primaryText
-                            }}
-                          >Visibility : </span>
-                          <span
-                            style={{
-                              fontFamily: Weights.SemiBold,
-                              fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                              color: Theme.secText
-                            }}
-                          >Private</span>
-                        </p>
-                        <div className={`w-full flex justify-between items-center`}>
+                            className={`shrink-0 active:scale-95 ${EditProjects[Project?.ProjectName] ? 'px-3 py-1.5' : 'p-1.5'}  rounded-full`}>
+                            {
+                              !EditProjects[Project?.ProjectName] ? <Pencil
+                                strokeWidth={2}
+                                size={20}
+                              />
+                                :
+                                'Save'
+                            }
+                          </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -324,6 +420,10 @@ const Projects = () => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
+                              if(EditProjects[Project.ProjectName]){
+                                toast.error('Complete Editing Project first!')
+                                return;
+                              }
                               dispatch(setWorkingProject({ project: Project }))
                               dispatch(setShowCanvas({ showCanvas: true }))
                             }}
@@ -334,7 +434,7 @@ const Projects = () => {
                               backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
                               borderColor: Theme.third
                             }}
-                            className={`self-end active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
+                            className={`absolute right-0 top-0 active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
                           >
                             <span>Open Project</span>
                             <ArrowRight strokeWidth={2.5} size={16} />

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const systemSlice = createSlice({
     name: 'systemSlice',
     initialState: {
-        userDetails: { },
+        userDetails: { userName: 'Ram', email : 'ram@gmail.com', password : 'ram12&'},
         CurrentPage: 'WorkSpacePage',
         ActivePage: 'Home'
     },
