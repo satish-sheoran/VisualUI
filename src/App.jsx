@@ -52,7 +52,7 @@ const App = () => {
             color: Theme.primaryText,
             fontFamily: Weights.ExtraBold,
             fontSize: `${(Sizes.Regular.slice(0, -3)) * 1}rem`
-          }} className={`overflow-hidden select-none w-full h-full flex items-center justify-center`}>
+          }} className={`font-black overflow-hidden select-none w-full h-full flex items-center justify-center`}>
             This app is only available for Mobiles right now.
           </div>
         }

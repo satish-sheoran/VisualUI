@@ -34,7 +34,7 @@ const AssetsSec = () => {
             fontFamily: Weights.SemiBold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
           }}
-          className={`border rounded-2xl py-2`}
+          className={`border rounded-2xl py-2 font-semibold`}
         >Icons</button>
         <button
           onClick={() => setActiveAsset('Images')}
@@ -45,7 +45,7 @@ const AssetsSec = () => {
             fontFamily: Weights.SemiBold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
           }}
-          className={`border rounded-2xl py-2`}
+          className={`border rounded-2xl py-2 font-semibold`}
         >Images</button>
         <button
           onClick={() => setActiveAsset('Illustrations')}
@@ -56,7 +56,7 @@ const AssetsSec = () => {
             fontFamily: Weights.SemiBold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
           }}
-          className={`border rounded-2xl py-2`}
+          className={`border rounded-2xl py-2 font-semibold`}
         >Illustrations</button>
       </div>
 

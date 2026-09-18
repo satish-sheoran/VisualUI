@@ -131,7 +131,7 @@ const Projects = () => {
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
               }}
-              className={`active:scale-97 overflow-hidden relative flex items-center justify-center py-2 border w-1/3 rounded-xl`}
+              className={`font-bold active:scale-97 overflow-hidden relative flex items-center justify-center py-2 border w-1/3 rounded-xl`}
             >
               {ProjectPage}
 
@@ -157,7 +157,7 @@ const Projects = () => {
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
               color: Theme.secText
             }}
-            className={`w-full h-full rounded-2xl flex items-center justify-center`}
+            className={`w-full h-full rounded-2xl flex items-center justify-center font-semibold`}
           >No Project has been added to Favourites!</div>
           :
           <>
@@ -232,21 +232,21 @@ const Projects = () => {
                                 color: Theme.secText,
                                 borderColor: Theme.third
                               }}
-                              className={`border rounded-lg mb-1 p-1`}
+                              className={`font-bold border rounded-lg mb-1 p-1`}
                             />
                             : <p style={{
                               color: Theme.primaryText,
                               fontFamily: Weights.ExtraBold,
                               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
                             }}
-                              className={`break-all select-none line-clamp-1`}
+                              className={`font-black break-all select-none line-clamp-1`}
                             >{Project?.ProjectName}</p>
                         }
                         <span style={{
                           color: Theme.secText,
                           fontFamily: Weights.SemiBold,
                           fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-                        }}>{`•  ${timeAgo}`}</span>
+                        }} className={`font-semibold`}>{`•  ${timeAgo}`}</span>
                       </div>
 
                       <div
@@ -276,7 +276,7 @@ const Projects = () => {
                             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`,
                             color: Theme.primaryText
                           }}
-                          className={`min-w-[35%]`}
+                          className={`font-bold min-w-[35%]`}
                         >Description : </p>
                         {
                           EditProjects[Project.ProjectName] ?
@@ -295,7 +295,7 @@ const Projects = () => {
                                 color: Theme.secText,
                                 borderColor: Theme.third
                               }}
-                              className={`px-2 grow border rounded-xl`}
+                              className={`px-2 grow border rounded-xl font-semibold`}
                             ></textarea>
                             : <p
                               style={{
@@ -303,7 +303,7 @@ const Projects = () => {
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
                                 color: Theme.secText
                               }}
-                              className={`flex items-center justify-start grow select-none`}>
+                              className={`font-semibold flex items-center justify-start grow select-none`}>
                               {Project?.Description === '' ? 'No description added yet.' : Project?.Description}
                             </p>
                         }
@@ -334,14 +334,14 @@ const Projects = () => {
                                   fontFamily: Weights.Bold,
                                   fontSize: `${(Sizes.Small.slice(0, -3)) * 1.15}rem`,
                                   color: Theme.primaryText
-                                }}
+                                }} className={`font-bold`}
                               >{InfoName}</span>
                               <span
                                 style={{
                                   fontFamily: Weights.SemiBold,
                                   fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
                                   color: Theme.secText
-                                }}
+                                }} className={`font-semibold`}
                               >{InfoVal}</span>
                             </p>
                           })
@@ -387,7 +387,7 @@ const Projects = () => {
                               backgroundColor: EditProjects[Project?.ProjectName] ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : '',
                               borderColor: Theme.third
                             }}
-                            className={`shrink-0 active:scale-95 ${EditProjects[Project?.ProjectName] ? 'px-3 py-1.5' : 'p-1.5'}  rounded-full`}>
+                            className={`font-bold shrink-0 active:scale-95 ${EditProjects[Project?.ProjectName] ? 'px-3 py-1.5' : 'p-1.5'}  rounded-full`}>
                             {
                               !EditProjects[Project?.ProjectName] ? <Pencil
                                 strokeWidth={2}
@@ -434,7 +434,7 @@ const Projects = () => {
                               backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
                               borderColor: Theme.third
                             }}
-                            className={`absolute right-0 top-0 active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
+                            className={`font-bold absolute right-0 top-0 active:scale-95 border py-1.5 rounded-2xl w-fit px-2 flex items-center gap-0.5`}
                           >
                             <span>Open Project</span>
                             <ArrowRight strokeWidth={2.5} size={16} />
@@ -451,7 +451,7 @@ const Projects = () => {
                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
                     color: Theme.secText
                   }}
-                  className={`w-full h-full rounded-2xl flex items-center justify-center`}
+                  className={`font-semibold w-full h-full rounded-2xl flex items-center justify-center`}
                 >No Project. Start Creating...</div>
             }
           </>

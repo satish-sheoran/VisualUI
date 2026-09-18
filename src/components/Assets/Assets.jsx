@@ -26,7 +26,7 @@ const Assets = () => {
           color : Theme.primaryText,
           fontSize : `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
           fontFamily : Weights.ExtraBold
-        }}
+        }} className={`font-black`}
         >Assets</span>
         <span
         style={{
@@ -34,6 +34,7 @@ const Assets = () => {
           fontSize : `${(Sizes.Small.slice(0, -3)) * 0.9}rem`,
           fontFamily : Weights.SemiBold
         }}
+        className={`font-semibold`}
         >Templates & Icon Library</span>
       </div>
 
@@ -49,7 +50,7 @@ const Assets = () => {
             fontFamily: Weights.Bold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
           }}
-          className={`border w-1/2 grow flex items-center justify-center gap-2 py-2 rounded-2xl`}
+          className={`font-bold border w-1/2 grow flex items-center justify-center gap-2 py-2 rounded-2xl`}
         >
           <LayoutTemplate strokeWidth={2.5} size={20} />
           <span>Templates</span>
@@ -64,7 +65,7 @@ const Assets = () => {
             fontFamily: Weights.Bold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
           }}
-          className={`border w-1/2 grow flex items-center justify-center gap-2 py-2 rounded-2xl`}
+          className={`font-bold border w-1/2 grow flex items-center justify-center gap-2 py-2 rounded-2xl`}
         >
           <Files strokeWidth={2.5} size={20} />
           <span>Assets</span>

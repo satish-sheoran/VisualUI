@@ -50,7 +50,7 @@ const Images = () => {
           fontFamily: Weights.SemiBold,
           fontSize: Sizes.Small
         }}
-        className={`w-full grow flex items-center justify-center`}>
+        className={`w-full grow flex items-center justify-center font-semibold`}>
         Adding Soon...
       </div>
 

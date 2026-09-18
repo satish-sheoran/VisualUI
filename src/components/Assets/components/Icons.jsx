@@ -70,7 +70,7 @@ const Icons = () => {
                     fontFamily: Weights.SemiBold,
                     fontSize: Sizes.Small
                 }}
-                className={`pt-[2.5%] w-full grow grid grid-cols-6 gap-2 `}>
+                className={`pt-[2.5%] w-full grow grid grid-cols-6 gap-2 font-semibold`}>
                 {
                     LUCID_ICONS.map(({ name, displayName, searchName, component: Component }) => {
                         return <button
@@ -81,7 +81,7 @@ const Icons = () => {
                                 fontSize: Sizes.Small,
                                 borderColor: Theme.third,
                             }}
-                            className={`border flex items-center justify-center rounded-full aspect-square`}
+                            className={`font-semibold border flex items-center justify-center rounded-full aspect-square`}
                         >
                             <ICONS.Search />
                         </button>

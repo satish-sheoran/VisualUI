@@ -32,7 +32,7 @@ const LoadingInitialPage = () => {
             color: COMMON_COLORS.White,
             fontFamily: Weights.ExtraBold,
             fontSize: `${(Sizes.ExtraLarge.slice(0, -3)) * 1.2}rem`
-          }}
+          }} className={`font-black`}
         >
           {APP_NAME}
         </h1>
@@ -42,6 +42,7 @@ const LoadingInitialPage = () => {
             fontFamily: Weights.SemiBold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`
           }}
+          className={`font-semibold`}
         >
           Build beautiful interfaces
         </p>

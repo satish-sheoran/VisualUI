@@ -1,4 +1,5 @@
 export const APP_NAME = 'Visual UI'
+export const APP_VERSION = '1.0.0'
 
 export const GET_STARTED_DATA = [
     {

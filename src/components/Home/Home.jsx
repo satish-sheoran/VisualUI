@@ -43,7 +43,7 @@ const Home = ({setShowNewProjectPopUp}) => {
             color: Theme.primaryText,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.35}rem`,
             fontFamily: Weights.Bold
-          }}>Good Morning, {userDetails.userName} 👋</h2>
+          }} className={`font-bold`}>Good Morning, {userDetails.userName} 👋</h2>
           <span style={{
             color: Theme.secText,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
@@ -66,12 +66,12 @@ const Home = ({setShowNewProjectPopUp}) => {
               color: Theme.primaryText,
               fontFamily: Weights.Bold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-            }} className={`mt-1`}>New Project</p>
+            }} className={`font-bold mt-1`}>New Project</p>
             <span style={{
               color: Theme.secText,
               fontFamily: Weights.SemiBold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 0.8}rem`
-            }}>Start from scratch</span>
+            }} className={`font-semibold`}>Start from scratch</span>
           </div>
 
           <div onClick={() => dispatch(setActivePage({newSection : 'Assets'}))} style={{
@@ -86,12 +86,12 @@ const Home = ({setShowNewProjectPopUp}) => {
               color: Theme.primaryText,
               fontFamily: Weights.Bold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-            }} className={`mt-1`}> Templates</p>
+            }} className={`mt-1 font-bold`}> Templates</p>
             <span style={{
               color: Theme.secText,
               fontFamily: Weights.SemiBold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 0.8}rem`
-            }}>50+ ready designs</span>
+            }} className={`font-semibold`}>50+ ready designs</span>
           </div>
         </div>
 
@@ -103,7 +103,7 @@ const Home = ({setShowNewProjectPopUp}) => {
               color: Theme.primaryText,
               fontFamily: Weights.ExtraBold,
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-            }}>Recent Projects</p>
+            }} className={`font-black`}>Recent Projects</p>
             {AllProjects.length > 0 && <p
               onClick={() => dispatch(setActivePage({newSection : 'Projects'}))}
               style={{
@@ -111,7 +111,7 @@ const Home = ({setShowNewProjectPopUp}) => {
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
               }} 
-              className="active:scale-95"
+              className="font-bold active:scale-95"
               >See All</p>}
           </div>
 
@@ -142,13 +142,13 @@ const Home = ({setShowNewProjectPopUp}) => {
                     fontFamily: Weights.ExtraBold,
                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1.25}rem`
                   }}
-                    className={`break-all select-none line-clamp-1`}
+                    className={`font-black break-all select-none line-clamp-1`}
                   >{Project.ProjectName}</p>
                   <span style={{
                     color: Theme.secText,
                     fontFamily: Weights.SemiBold,
                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-                  }}>{`•  ${timeAgo}`}</span>
+                  }} className={`font-semibold`}>{`•  ${timeAgo}`}</span>
                 </div>
 
                 <div
@@ -162,7 +162,7 @@ const Home = ({setShowNewProjectPopUp}) => {
                 color: Theme.primaryText,
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-              }} className={`w-full h-15  flex items-center justify-center`}>No Recent Projects...</div>
+              }} className={`font-black w-full h-15  flex items-center justify-center`}>No Recent Projects...</div>
             }
           </div>
         </div>
@@ -173,7 +173,7 @@ const Home = ({setShowNewProjectPopUp}) => {
             color: Theme.primaryText,
             fontFamily: Weights.ExtraBold,
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-          }}>Quick Tools</p>
+          }} className={`font-black`}>Quick Tools</p>
           <div className={`grid grid-cols-3 gap-3`}>
             {Tools.map(({ icon, Name }) => {
               const Icon = Icons[icon]
@@ -192,7 +192,7 @@ const Home = ({setShowNewProjectPopUp}) => {
                   color: Theme.primaryText,
                   fontFamily: Weights.Bold,
                   fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
-                }}>{Name}</span>
+                }} className={`font-bold`}>{Name}</span>
               </div>
             })}
           </div>

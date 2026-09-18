@@ -54,13 +54,13 @@ const LoginPage = () => {
             color: Theme.primaryText,
             fontFamily: Weights.ExtraBold,
             fontSize: `${(Sizes.Regular.slice(0, -3)) * 1.3}rem`
-          }}
+          }} className={`font-black`}
         >Welcome back</p>
         <span style={{
           color: Theme.secText,
           fontFamily: Weights.SemiBold,
           fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-        }} className={`text-center`}>Login to continue building <br /> beautiful interfaces.</span>
+        }} className={`font-semibold text-center`}>Login to continue building <br /> beautiful interfaces.</span>
       </div>
 
       {/* Email and Pass input with remember pass and forget pass feat */}
@@ -73,7 +73,7 @@ const LoginPage = () => {
               color: Theme.primaryText,
               fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
               fontFamily: Weights.Bold
-            }}
+            }} className={`font-bold`}
           >Email</label>
           <input
             {...register('email', {
@@ -92,13 +92,13 @@ const LoginPage = () => {
               fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
               fontFamily: Weights.Bold
             }}
-            className={` px-2 py-2.5 rounded-xl border outline-0`}
+            className={`font-bold px-2 py-2.5 rounded-xl border outline-0`}
           />
           {errors?.email?.message && <p style={{
             color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red')?.CODE,
             fontFamily: Weights.Bold,
             fontSize: Sizes.Small
-          }} >• {errors.email.message}</p>}
+          }} className={`font-bold`} >• {errors.email.message}</p>}
         </div>
 
 
@@ -109,7 +109,7 @@ const LoginPage = () => {
               color: Theme.primaryText,
               fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
               fontFamily: Weights.Bold
-            }}
+            }} className={`font-bold`}
           >Password</label>
           <input
             {...register('password', {
@@ -134,7 +134,7 @@ const LoginPage = () => {
             color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red')?.CODE,
             fontFamily: Weights.Bold,
             fontSize: Sizes.Small
-          }}>• {errors.password.message}</p>}
+          }} className={`font-bold`}>• {errors.password.message}</p>}
         </div>
 
         <button
@@ -146,7 +146,7 @@ const LoginPage = () => {
             fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
             fontFamily: Weights.Bold
           }}
-          className={`mt-4 border py-2 rounded-2xl active:scale-97`}
+          className={`font-bold mt-4 border py-2 rounded-2xl active:scale-97`}
         >Login</button>
       </form>
 
@@ -157,7 +157,7 @@ const LoginPage = () => {
           color: Theme.secText,
           fontFamily: Weights.ExtraBold,
           fontSize: `${(Sizes.Small.slice(0, -3)) * 1}rem`
-        }} >Don't have an account?</span>
+        }} className={`font-black`} >Don't have an account?</span>
         <a
           onClick={() => dispatch(setCurrentPage({ newPage: 'SignUpPage' }))}
           style={{
@@ -166,7 +166,7 @@ const LoginPage = () => {
             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
           }}
           href="#"
-          className={`active:scale-97`}
+          className={`font-black active:scale-97`}
         >Sign up</a>
       </div>
 

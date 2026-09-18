@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { INITIAL_SETTINGS } from "../../constants/Settings";
 
 const systemSlice = createSlice({
     name: 'systemSlice',
     initialState: {
-        userDetails: { userName: 'Ram', email : 'ram@gmail.com', password : 'ram12&'},
+        userDetails: { },
         CurrentPage: 'WorkSpacePage',
-        ActivePage: 'Home'
+        ActivePage: 'Home',
+        Settings: INITIAL_SETTINGS
     },
     reducers: {
         setCurrentPage(state, action) {
@@ -22,11 +25,30 @@ const systemSlice = createSlice({
             const { userName, email, password } = action.payload;
             if (!userName || !email || !password) return;
             state.userDetails = { userName, email, password }
-        }
+        },
+        updateSetting(state, action) {
+            // Setting section is the section ( like general ,system appearance etc.) while option is the setting need to be changed ex : Theme, Accent color etc.
+            const { SettingSection, option, value } = action.payload
 
+            if (!SettingSection || !option) return;
+
+            if (
+                !Object.hasOwn(state.Settings, SettingSection)
+                || !Object.hasOwn(state.Settings[SettingSection], option)
+            ) return;
+
+            state.Settings[SettingSection] = {
+                ...state.Settings,
+                ...state.Settings[SettingSection],
+                [option]: value
+            };
+        },
+        ResetSettings(state) {
+            state.Settings = INITIAL_SETTINGS
+        }
     }
 })
 
-export const { setCurrentPage, setActivePage, setuserDetails } = systemSlice.actions;
+export const { setCurrentPage, setActivePage, setuserDetails, updateSetting, ResetSettings } = systemSlice.actions;
 
 export default systemSlice.reducer;

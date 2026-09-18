@@ -135,7 +135,7 @@ const GetStartedPage = () => {
                             fontFamily: Weights.ExtraBold,
                             fontSize: `${(Sizes.Large.slice(0, -3)) * 1.35}rem`
                         }}
-                        className={`leading-7.5 text-center`}
+                        className={`font-black leading-7.5 text-center`}
                     >{GET_STARTED_DATA[count]?.detail}
                     </p>
                     <p ref={DescTxtRef}
@@ -144,7 +144,7 @@ const GetStartedPage = () => {
                             fontFamily: Weights.SemiBold,
                             fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`
                         }}
-                        className={`max-w-8/10 text-center`}
+                        className={`max-w-8/10 text-center font-semibold`}
                     >{GET_STARTED_DATA[count]?.description}
                     </p>
                 </div>
@@ -181,7 +181,7 @@ const GetStartedPage = () => {
                         fontFamily: Weights.ExtraBold,
                         fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
                     }}
-                    className={`active:scale-95 border w-full rounded-2xl py-2`}>Get Started</button>
+                    className={`font-black active:scale-95 border w-full rounded-2xl py-2`}>Get Started</button>
 
                 <button
                     onClick={() => {
@@ -195,7 +195,7 @@ const GetStartedPage = () => {
                         fontFamily: Weights.ExtraBold,
                         fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.9}rem`,
                     }} 
-                    className={`active:scale-95 border w-full rounded-2xl py-2`}>Sign In</button>
+                    className={`font-black active:scale-95 border w-full rounded-2xl py-2`}>Sign In</button>
             </div>
 
         </section>

@@ -14,7 +14,12 @@ zod
 
 
 what i did for this commit :
-feat : Added project editing feature and validation
+feat: build reusable settings options system
+
+- Added settings option designs and interactions.
+- Refactored option UI into reusable components.
+- Added dynamic rendering for different option types.
+- Settings changes are currently not persisted.
 
 Suggestion :
 1. initially in select sevtion : user will see - Select something to get control changes

@@ -81,6 +81,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                     fontSize: Sizes.Small,
                                     fontFamily: Weights.Bold
                                 }}
+                                className={`font-bold`}
                             >
                                 {Option}
                             </span>
@@ -96,7 +97,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                         fontSize: `${(Sizes.Small.slice(0, -3)) * 1.1}rem`,
                         fontFamily: Weights.SemiBold
                     }}
-                    className={`h-[10vh] overflow-hidden grow flex items-center justify-center`}>
+                    className={`h-[10vh] overflow-hidden grow font-semibold flex items-center justify-center`}>
                     Drag canvas to navigate
                 </div>
             }
@@ -119,7 +120,9 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                             fontSize: `${(Sizes.Small.slice(0, -3)) * 1.05}rem`,
                             fontFamily: Weights.Bold,
                             color: Theme.primaryText
-                        }}>
+                        }} 
+                        className={`font-bold`}
+                        >
                         Opacity : {opacity}%
                     </span>
                     <input
@@ -179,7 +182,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`,
                                     fontFamily: Weights.Bold
                                 }}
-                                className={`border flex flex-col items-center justify-center rounded-2xl p-1 active:scale-95`}
+                                className={`font-bold border flex flex-col items-center justify-center rounded-2xl p-1 active:scale-95`}
                             >
                                 {Icon && <Icon size={17} strokeWidth={2} />}
                                 <span>{Option}</span>
@@ -230,6 +233,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                     fontFamily: Weights.Bold,
                                     color: Theme.primaryText
                                 }}
+                                className={`font-bold`}
                             >
                                 Quick controls
                             </span>
@@ -286,7 +290,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                         fontSize: `${(Sizes.Small.slice(0, -3)) * 0.8}rem`,
                                         fontFamily: Weights.Bold
                                     }}
-                                    className={`border flex flex-col gap-0.5 items-center justify-center rounded-xl p-1 active:scale-95`}
+                                    className={`font-bold border flex flex-col gap-0.5 items-center justify-center rounded-xl p-1 active:scale-95`}
                                 >
                                     {Icon && <Icon size={17} strokeWidth={2} />}
                                     <span>{Option}</span>
@@ -318,7 +322,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.05}rem`,
                                 fontFamily: Weights.Bold,
                                 color: Theme.primaryText
-                            }}>
+                            }} className={`font-bold`}>
                             {zoom}%
                         </span>
                         <input
@@ -355,7 +359,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                             borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Hover_Clr,
                             fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`
                         }}
-                        className={`active:scale-95 px-1.5 py-2 border flex items-center justify-center rounded-xl`}
+                        className={`font-bold active:scale-95 px-1.5 py-2 border flex items-center justify-center rounded-xl`}
                     >
                         Reset Zoom
                     </button>

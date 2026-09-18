@@ -121,7 +121,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                                 color: Theme.primaryText,
                                 fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
                                 fontFamily: Weights.Bold
-                            }}
+                            }} className={`font-bold`}
                         >Project Name</label>
                         <input
                             {...register('ProjectName')}
@@ -142,7 +142,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                             color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red')?.CODE,
                             fontFamily: Weights.Bold,
                             fontSize: Sizes.Small
-                        }} >• {errors.ProjectName.message}</p>}
+                        }} className={`font-bold`} >• {errors.ProjectName.message}</p>}
                     </div>
 
                     {/* Description */}
@@ -152,7 +152,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                                 color: Theme.primaryText,
                                 fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
                                 fontFamily: Weights.Bold
-                            }}
+                            }} className={`font-bold`}
                         >Description</label>
 
                         <div
@@ -176,14 +176,14 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
                                     fontFamily: Weights.Bold
                                 }}
-                                className={`w-full px-2 py-2.5  outline-0`}
+                                className={`font-bold w-full px-2 py-2.5  outline-0`}
                             />
                         </div>
                         {errors?.Description?.message && <p style={{
                             color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red')?.CODE,
                             fontFamily: Weights.Bold,
                             fontSize: Sizes.Small
-                        }} >• {errors.Description.message}</p>}
+                        }} className={`font-bold`}>• {errors.Description.message}</p>}
                     </div>
 
 
@@ -196,7 +196,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                             fontSize: `${(Sizes.Regular.slice(0, -3)) * 0.8}rem`,
                             fontFamily: Weights.Bold
                         }}
-                        className={`mt-2 border py-2 rounded-2xl active:scale-97`}
+                        className={`font-bold mt-2 border py-2 rounded-2xl active:scale-97`}
                     >Create Project</button>
                 </form>
 

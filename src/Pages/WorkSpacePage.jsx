@@ -78,7 +78,7 @@ const WorkSpacePage = () => {
                             color: Theme.primaryText,
                             fontFamily: Weights.ExtraBold,
                             fontSize: `${(Sizes.Regular.slice(0, -3)) * 1}rem`
-                        }}
+                        }} className={`font-black`}
                     >
                         {APP_NAME}</span>
                 </div>
@@ -136,7 +136,7 @@ const WorkSpacePage = () => {
                                                 color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
                                                 fontFamily: Weights.SemiBold,
                                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                                            }}
+                                            }} className={`font-semibold`}
                                         >{page}</span>
                                     </div>
                                 })
@@ -178,7 +178,7 @@ const WorkSpacePage = () => {
                                                 color: ActivePage === page ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
                                                 fontFamily: Weights.SemiBold,
                                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`
-                                            }}
+                                            }} className={`font-semibold`}
                                         >{page}</span>
                                     </div>
                                 })
@@ -233,14 +233,14 @@ const WorkSpacePage = () => {
                                 color: Theme.primaryText,
                                 fontFamily: Weights.ExtraBold,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-                            }}>
+                            }} className={`font-black`}>
                                 {userDetails.userName ?? 'Error Fetching'}
                             </span>
                             <span style={{
                                 color: Theme.secText,
                                 fontFamily: Weights.Bold,
                                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
-                            }}>
+                            }} className={`font-bold`}>
                                 {userDetails.email ?? 'Error!'}
                             </span>
                         </p>
@@ -252,7 +252,7 @@ const WorkSpacePage = () => {
                                 fontFamily: Weights.Bold,
                                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
                             }}
-                            className={`active:scale-95 flex items-center justify-center px-1 py-0.5 rounded-lg`}
+                            className={`font-bold active:scale-95 flex items-center justify-center px-1 py-0.5 rounded-lg`}
                         >
                             Pro Plus
                         </p>
@@ -312,7 +312,7 @@ const WorkSpacePage = () => {
                                     color: ActivePage === option ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.primaryText,
                                     fontFamily: Weights.Bold,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-                                }}>
+                                }} className={`font-bold`}>
                                     {option}
                                 </span>
                             </div>
@@ -336,7 +336,7 @@ const WorkSpacePage = () => {
                                     color: Theme.primaryText,
                                     fontFamily: Weights.Bold,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-                                }}>Dark Mode</span>
+                                }} className={`font-bold`}>Dark Mode</span>
                             </div>
                             <button
                                 style={{
@@ -367,7 +367,7 @@ const WorkSpacePage = () => {
                                 color: Theme.primaryText,
                                 fontFamily: Weights.Bold,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-                            }}>Log Out</span>
+                            }} className={`font-bold`}>Log Out</span>
                         </div>
                     </div>
                 </div>

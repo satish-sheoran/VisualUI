@@ -46,8 +46,8 @@
 * {
     box-sizing: border-box;
     transition-property: 'color, background-color, border-color, font-size';
-    /* transition-duration: var(--Speed); */
-    /* transition-timing-function: var(--easing); */
+    transition-duration: var(--Speed);
+    transition-timing-function: var(--easing);
 }
 
 html,

@@ -111,7 +111,7 @@ const PrimaryControls = ({ showContextControl, setShowContextControl, ContextCon
                                 fontSize: Sizes.Small,
                                 fontFamily: Weights.ExtraBold,
                                 color: Control === 'Insert' ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE : Theme.secText
-                            }}
+                            }} className={`font-black`}
                         >
                             {Control}
                         </span>

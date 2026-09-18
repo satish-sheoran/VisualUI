@@ -33,7 +33,7 @@ const Profile = () => {
               color: Theme.primaryText,
               fontFamily: Weights.ExtraBold,
               fontSize: `${(Sizes.Regular.slice(0, -3)) * 1.25}rem`
-            }}>
+            }} className={`font-black`}>
             {userDetails.userName}
           </p>
 
@@ -42,7 +42,7 @@ const Profile = () => {
               color: Theme.secText,
               fontFamily: Weights.Bold,
               fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
-            }}
+             }} className={`font-bold`}
           >
             {userDetails.email}
           </p>
@@ -62,14 +62,14 @@ const Profile = () => {
                 color: Theme.primaryText,
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
-              }}
+              }} className={`font-black`}
             >{Projects.length}</span>
             <span
               style={{
                 color: Theme.secText,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
-              }}
+              }} className={`font-bold`}
             >Projects</span>
           </p>
           <p className={`flex flex-col items-center gap-0.5`}>
@@ -78,14 +78,14 @@ const Profile = () => {
                 color: Theme.primaryText,
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
-              }}
+              }} className={`font-black`}
             >0</span>
             <span
               style={{
                 color: Theme.secText,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
-              }}
+              }} className={`font-bold`}
             >Teams</span>
           </p>
           <p className={`flex flex-col items-center gap-0.5`}>
@@ -94,14 +94,14 @@ const Profile = () => {
                 color: Theme.primaryText,
                 fontFamily: Weights.ExtraBold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 1.2}rem`
-              }}
+              }} className={`font-black`}
             >{Projects.filter(({ isFavourite }) => isFavourite)?.length}</span>
             <span
               style={{
                 color: Theme.secText,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, 3)) * 0.9}rem`
-              }}
+              }} className={`font-bold`}
             >Favourites</span>
           </p>
         </div>
