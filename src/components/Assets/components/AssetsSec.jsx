@@ -22,7 +22,7 @@ const AssetsSec = () => {
       style={{
         borderColor: Theme.third
       }}
-      className={`border-t w-full grow overflow-x-hidden overflow-y-auto flex flex-col pt-[5%]`}>
+      className={`border-t relative  w-full grow overflow-x-hidden overflow-y-auto flex flex-col pt-[5%]`}>
 
       <div className={`grid grid-cols-3 gap-3 shrink-0 overflow-hidden mb-4`}>
         <button
@@ -60,7 +60,7 @@ const AssetsSec = () => {
         >Illustrations</button>
       </div>
 
-      {activeAsset === 'Icons' && <Icons />}
+      {activeAsset === 'Icons' && <Icons activeAsset={activeAsset}/>}
       {activeAsset === 'Images' && <Images />}
       {activeAsset === 'Illustrations' && <Illustrations />}
     </div>

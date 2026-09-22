@@ -14,12 +14,16 @@ zod
 
 
 what i did for this commit :
-feat: build reusable settings options system
+feat: improve icon showcase and customization and copy to clipbaord functionality
 
-- Added settings option designs and interactions.
-- Refactored option UI into reusable components.
-- Added dynamic rendering for different option types.
-- Settings changes are currently not persisted.
+- Fixed asset icons not rendering correctly.
+- Added an interactive icon details panel on icon selection.
+- Added controls to adjust icon size and stroke width.
+- Added icon metadata including name, size and stroke width.
+- Added buttons to copy the generated JSX code and icon configuration object.
+- Add copy to clipboard functionality with mobile fallback
+
+
 
 Suggestion :
 1. initially in select sevtion : user will see - Select something to get control changes

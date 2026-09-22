@@ -1,41 +1,40 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ACCENT_COLORS } from '../../../constants/style'
-import * as ICONS from 'lucide-react'
+import { icons as ICONS, Search } from 'lucide-react'
+import IconInfo from './Icons/IconInfo'
+import gsap from 'gsap'
 
-const Icons = () => {
+const Icons = ({ activeAsset }) => {
 
     const Device = useSelector(store => store.Preferences.Device)
     const Theme = useSelector((store) => store.Preferences.Theme)
-    const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-    const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
 
     const LUCID_ICONS = useMemo(() => {
-        return Object.entries(ICONS)
-            .filter(([name, Icon]) => {
-                return (
-                    typeof Icon === "object" &&
-                    Icon !== null &&
-                    Icon.$$typeof?.toString() === "Symbol(react.forward_ref)"
-                );
-            })
-            .map(([name, Icon]) => ({
-                name,
-                displayName: Icon.displayName || name,
-                searchName: name.toLowerCase(),
-                component: Icon
-            }));
+        return Object.entries(ICONS).map(([name, Icon]) => ({
+            name,
+            displayName: name,
+            searchName: name.toLowerCase(),
+            component: Icon,
+        }));
     }, []);
+
 
     // states
     const [isFocused, setisFocused] = useState(false)
     const [inputVal, setInputVal] = useState('')
+    const [showIconInfo, setShowIconInfo] = useState({ show: false, icon: {} })
 
-    // useEffect(() => {
-    //     console.log(LUCID_ICONS)
-    // }, [])
+    // refs
+    const IconInfoRef = useRef(null)
+
+    useEffect(() => {
+        if (activeAsset === 'Icons') return;
+        setShowIconInfo({ show: false, icon: {} })
+
+    }, [activeAsset])
 
     return (
         <>
@@ -47,7 +46,7 @@ const Icons = () => {
                 }}
                 className={`shrink-0 mb-2 border flex gap-2 py-2 rounded-2xl ${Device !== 'Desktop' ? 'px-3' : 'px-2.5'}`}>
 
-                <ICONS.Search strokeWidth={2.5} size={25} />
+                <Search strokeWidth={2.5} size={25} />
                 <input
                     value={inputVal}
                     onChange={(e) => setInputVal(e.target.value)}
@@ -71,23 +70,41 @@ const Icons = () => {
                     fontSize: Sizes.Small
                 }}
                 className={`pt-[2.5%] w-full grow grid grid-cols-6 gap-2 font-semibold`}>
-                {
-                    LUCID_ICONS.map(({ name, displayName, searchName, component: Component }) => {
-                        return <button
-                            style={{
-                                color: Theme.primaryText,
-                                backgroundColor: Theme.header,
-                                fontFamily: Weights.SemiBold,
-                                fontSize: Sizes.Small,
-                                borderColor: Theme.third,
-                            }}
-                            className={`font-semibold border flex items-center justify-center rounded-full aspect-square`}
-                        >
-                            <ICONS.Search />
-                        </button>
-                    })
-                }
+                {LUCID_ICONS.map(({ name, component: Component }) => (
+                    <button
+                        key={name}
+                        onClick={() => {
+                            if (!showIconInfo.show) {
+
+                                gsap.fromTo(IconInfoRef.current, {
+                                    y: 50,
+                                }, {
+                                    y: 0,
+                                    duration: 1,
+                                    ease: 'back.out'
+                                })
+                            }
+                            setShowIconInfo({ show: true, icon: { name, Component } })
+                        }
+                        }
+                        style={{
+                            color: Theme.primaryText,
+                            backgroundColor: Theme.header,
+                            fontFamily: Weights.SemiBold,
+                            fontSize: Sizes.Small,
+                            borderColor: Theme.third,
+                        }}
+                        className={`active:scale-95 font-semibold border flex items-center justify-center rounded-full aspect-square`}
+                    >
+                        <Component size={20} strokeWidth={2} />
+                    </button>
+                ))}
             </div>
+
+            {showIconInfo.show && 
+            <IconInfo showIconInfo={showIconInfo} setShowIconInfo={setShowIconInfo} IconInfoRef={IconInfoRef} />
+            }
+
         </>
     )
 }

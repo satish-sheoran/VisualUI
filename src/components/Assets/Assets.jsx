@@ -18,7 +18,7 @@ const Assets = () => {
   const [activeSection, setActiveSection] = useState('Templates')
 
   return (
-    <div className={`w-full h-full overflow-hidden pt-[2.5%] flex flex-col p-[5%] pb-[0%] gap-4`}>
+    <div className={`relative w-full h-full overflow-hidden pt-[2.5%] flex flex-col p-[5%] pb-[0%] gap-4`}>
 
       <div className={`flex flex-col gap-0`}>
         <span
