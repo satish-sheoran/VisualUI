@@ -14,14 +14,10 @@ zod
 
 
 what i did for this commit :
-feat: improve icon showcase and customization and copy to clipbaord functionality
+feat(search): add animated search input for icons search
 
-- Fixed asset icons not rendering correctly.
-- Added an interactive icon details panel on icon selection.
-- Added controls to adjust icon size and stroke width.
-- Added icon metadata including name, size and stroke width.
-- Added buttons to copy the generated JSX code and icon configuration object.
-- Add copy to clipboard functionality with mobile fallback
+- Shrinks input width dynamically when text is entered
+- Uses GSAP for smooth exponential easing transitions
 
 
 

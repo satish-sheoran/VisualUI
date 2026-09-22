@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { ACCENT_COLORS } from '../../../constants/style'
-import { icons as ICONS, Search } from 'lucide-react'
+import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style'
+import { Fish, icons as ICONS, Search, SearchAlert, X } from 'lucide-react'
 import IconInfo from './Icons/IconInfo'
 import gsap from 'gsap'
+import { toast } from 'react-toastify'
+import { useGSAP } from '@gsap/react'
 
 const Icons = ({ activeAsset }) => {
 
@@ -21,14 +23,28 @@ const Icons = ({ activeAsset }) => {
         }));
     }, []);
 
-
     // states
     const [isFocused, setisFocused] = useState(false)
     const [inputVal, setInputVal] = useState('')
     const [showIconInfo, setShowIconInfo] = useState({ show: false, icon: {} })
 
+    // Derive a boolean so the effect only triggers when the state actually crosses the boundary
+    const hasText = inputVal.trim().length > 0;
+    
+    const filteredIcons = useMemo(() => {
+        if (!inputVal.trim()) {
+            return LUCID_ICONS;
+        }
+        const search = inputVal.toLowerCase().trim();
+
+        return LUCID_ICONS.filter((icon) =>
+            icon.searchName.toLowerCase().includes(search))
+    }, [LUCID_ICONS, inputVal])
+
+
     // refs
     const IconInfoRef = useRef(null)
+    const InputRef = useRef(null)
 
     useEffect(() => {
         if (activeAsset === 'Icons') return;
@@ -36,31 +52,57 @@ const Icons = ({ activeAsset }) => {
 
     }, [activeAsset])
 
+    useGSAP(() => {
+        if (!InputRef.current) return;
+
+        gsap.to(InputRef.current, {
+            width: inputVal.trim() ? '85%' : '100%',
+            duration: 0.5,
+            ease: 'expo.inOut'
+        })
+
+    }, [hasText])
+
     return (
         <>
             {/* search section */}
-            <div
-                style={{
-                    backgroundColor: Theme.header, color: Theme.primaryText,
-                    borderColor: isFocused ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue').CODE : Theme.third
-                }}
-                className={`shrink-0 mb-2 border flex gap-2 py-2 rounded-2xl ${Device !== 'Desktop' ? 'px-3' : 'px-2.5'}`}>
-
-                <Search strokeWidth={2.5} size={25} />
-                <input
-                    value={inputVal}
-                    onChange={(e) => setInputVal(e.target.value)}
-                    type="text"
-                    spellCheck={false}
-                    placeholder="Search icons ..."
-                    onFocus={() => setisFocused(true)}
-                    onBlur={() => setisFocused(false)}
+            <div className={`relative mb-2 flex items-start gap-2`}>
+                <div
+                    ref={InputRef}
                     style={{
-                        fontSize: Device !== 'Desktop' ? `${(Sizes.Small.slice(0, -3)) * 1.2}rem` : `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
-                        , color: Theme.primaryText, fontFamily: Weights.SemiBold,
+                        backgroundColor: Theme.header, color: Theme.primaryText,
+                        borderColor: isFocused ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue').CODE : Theme.third
                     }}
-                    className={`w-full  font-semibold outline-none focus:ring-0 focus:border-0 focus:outline-none`}
-                />
+                    className={`z-1 w-full border flex gap-2 py-2 rounded-2xl ${Device !== 'Desktop' ? 'px-3' : 'px-2.5'}`}>
+
+                    <Search strokeWidth={2.5} size={25} />
+                    <input
+                        value={inputVal}
+                        onChange={(e) => setInputVal(e.target.value)}
+                        type="text"
+                        spellCheck={false}
+                        placeholder="Search icons ..."
+                        onFocus={() => setisFocused(true)}
+                        onBlur={() => setisFocused(false)}
+                        maxLength={50}
+                        style={{
+                            fontSize: Device !== 'Desktop' ? `${(Sizes.Small.slice(0, -3)) * 1.2}rem` : `${(Sizes.Small.slice(0, -3)) * 1.1}rem`
+                            , color: Theme.primaryText, fontFamily: Weights.SemiBold,
+                        }}
+                        className={`w-full  font-semibold outline-none focus:ring-0 focus:border-0 focus:outline-none`}
+                    />
+                </div>
+                <button
+                    onClick={() => setInputVal('')}
+                    style={{
+                        color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').CODE,
+                        borderColor: Theme.third,
+                        backgroundColor: Theme.header
+                    }}
+                    className={`absolute right-0 top-0 shrink-0 border h-full p-0.5 aspect-square 
+                rounded-full flex items-center justify-center active:scale-95`}>
+                    <X strokeWidth={2} size={28} />
+                </button>
             </div>
 
             <div
@@ -69,8 +111,11 @@ const Icons = ({ activeAsset }) => {
                     fontFamily: Weights.SemiBold,
                     fontSize: Sizes.Small
                 }}
-                className={`pt-[2.5%] w-full grow grid grid-cols-6 gap-2 font-semibold`}>
-                {LUCID_ICONS.map(({ name, component: Component }) => (
+                className={`pt-[2.5%] w-full grow font-semibold
+                     ${filteredIcons.length > 0 ? 'grid grid-cols-6 gap-2 content-start'
+                        : 'flex flex-col items-center justify-center gap-3'}
+                        `}>
+                {filteredIcons.length > 0 ? filteredIcons.map(({ name, component: Component }) => (
                     <button
                         key={name}
                         onClick={() => {
@@ -98,11 +143,44 @@ const Icons = ({ activeAsset }) => {
                     >
                         <Component size={20} strokeWidth={2} />
                     </button>
-                ))}
+
+                ))
+                    :
+                    <>
+                        <Fish style={{ color: Theme.primaryText }} strokeWidth={1.5} size={40} />
+                        <span
+                            style={{
+                                color: Theme.primaryText,
+                                fontSize: `${(Sizes.Small.slice(0, -3)) * 1.3}rem`,
+                                fontFamily: Weights.Bold
+                            }} className={`text-center`}
+                        >{`No results for "${inputVal}"`}</span>
+
+                        <div
+                            style={{
+                                color: Theme.secText,
+                                fontSize: `${(Sizes.ExtraSmall.slice(0, -3)) * 1.2}rem`,
+                                fontFamily: Weights.Regular
+                            }}
+                            className='text-center'
+                        >This icon doesn't seem to exist... yet. Try searching similar terms, browsing existing requests, or opening a new one.</div>
+
+                        <button
+                            onClick={() => setInputVal('')}
+                            style={{
+                                backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Hover_Clr,
+                                borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').CODE,
+                                color: COMMON_COLORS.White,
+                                fontSize: Sizes.Small,
+                                fontFamily: Weights.Bold
+                            }}
+                            className={`mt-1 border w-fit rounded-2xl py-1.5 px-2 active:scale-95`}>Clear search & try again</button>
+                    </>
+                }
             </div>
 
-            {showIconInfo.show && 
-            <IconInfo showIconInfo={showIconInfo} setShowIconInfo={setShowIconInfo} IconInfoRef={IconInfoRef} />
+            {showIconInfo.show &&
+                <IconInfo showIconInfo={showIconInfo} setShowIconInfo={setShowIconInfo} IconInfoRef={IconInfoRef} />
             }
 
         </>
