@@ -5,6 +5,8 @@ import CanvasArea from './components/CanvasArea';
 import PrimaryControls from './components/PrimaryControls';
 import ContextControls from './components/ContextControls';
 import LoadSettingsPage from './components/LoadSettingsPage';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
 const Canvas = ({ showBurger, setshowBurger }) => {
 
@@ -15,13 +17,18 @@ const Canvas = ({ showBurger, setshowBurger }) => {
     const [activeTool, setActiveTool] = useState('Select')
     const [zoom, setZoom] = useState(100)
     const [opacity, setOpacity] = useState(100)
-    const [showContextControl, setShowContextControl] = useState(false)
-    const [showSettings, setShowSettings] = useState(false)
+    const [activeOverlayData, setActiveOverlayData] = useState('')
 
 
     // refs
-    const ContextControlRef = useRef(null) // ref used to animate (show/hide) context controls
-    const SettingRef = useRef(null) //used to animate (show/hide) settings area when user click "settings" named primary Control
+    const OverlayRef = useRef(null)
+
+    useGSAP(() => {
+        gsap.set(OverlayRef.current, {
+            bottom: '-300%',
+            opacity: 0
+        });
+    }, { scope: OverlayRef })
 
     return (
         <section
@@ -43,33 +50,46 @@ const Canvas = ({ showBurger, setshowBurger }) => {
                 <footer className={` relative px-[2.5%] py-2`}>
                     <div className={`relative flex flex-col gap-5 w-full`}>
 
-                        {/* overlay where we do select ,drag, insert inside that element */}
-                        <ContextControls
-                            activeTool={activeTool}
-                            setActiveTool={setActiveTool}
-                            setOpacity={setOpacity}
-                            opacity={opacity}
-                            showQuickControls={showQuickControls}
-                            setShowQuickControls={setShowQuickControls}
-                            zoom={zoom}
-                            setZoom={setZoom}
-                            ref={ContextControlRef}
-                        />
+                        <div
+                            ref={OverlayRef}
+                            style={{
+                                borderColor: Theme.third,
+                                backgroundColor: Theme.header
+                            }}
+                            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl ${activeOverlayData === 'Settings'?'':'px-[2.5%] py-4'}  h-fit`}
+                        >
+                            {/* overlay where we do select ,drag, insert inside that element */}
+                            {activeOverlayData === 'More' &&
+                                <ContextControls
+                                    activeTool={activeTool}
+                                    setActiveTool={setActiveTool}
+                                    setOpacity={setOpacity}
+                                    opacity={opacity}
+                                    showQuickControls={showQuickControls}
+                                    setShowQuickControls={setShowQuickControls}
+                                    zoom={zoom}
+                                    setZoom={setZoom}
+                                />}
 
-                        {/* overlay of settings */}
-                        <LoadSettingsPage
-                            ref={SettingRef}
-                            setShowSettings={setShowSettings}
-                        />
+                            {/* overlay of settings */}
+                            {activeOverlayData === 'Settings' &&
+                                <LoadSettingsPage
+                                    ref={OverlayRef}
+                                    setActiveOverlayData={setActiveOverlayData}
+                                />}
+
+                        </div>
+
+
+
+
 
                         {/* bottom controls : Inset,Preview,Setting,more and layers */}
                         <PrimaryControls
-                            ContextControlRef={ContextControlRef}
-                            showContextControl={showContextControl}
-                            setShowContextControl={setShowContextControl}
-                            showSettings={showSettings}
-                            setShowSettings={setShowSettings}
-                            SettingRef={SettingRef}
+                            activeOverlayData={activeOverlayData}
+                            setActiveOverlayData={setActiveOverlayData}
+                            ref={OverlayRef}
+
                         />
                     </div>
                 </footer>

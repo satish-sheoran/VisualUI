@@ -13,7 +13,7 @@ zod
 @hookform/resolvers
 
 
-what i did for this commit :
+what i did for last commit :
 Fix  : icon search overlap and wire up Canvas settings control
 
 * Fixed a layering bug where the icon search area incorrectly appeared above the sticky icon info overlay.

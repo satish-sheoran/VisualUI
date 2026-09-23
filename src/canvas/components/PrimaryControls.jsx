@@ -6,8 +6,7 @@ import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
 import gsap from 'gsap'
 
 const PrimaryControls = ({
-    showContextControl, setShowContextControl, ContextControlRef,
-    showSettings, setShowSettings, SettingRef
+    activeOverlayData, setActiveOverlayData, ref
 }) => {
 
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
@@ -15,25 +14,25 @@ const PrimaryControls = ({
     const Theme = useSelector((store) => store.Preferences.Theme)
 
 
-    function AnimateOverlay(showElem, setShowElem, ElemRef) {
-        if (!ElemRef.current) return;
+    function AnimateOverlay(value) {
+        if (!ref.current) return;
 
-        if (showElem) {
-            gsap.to(ElemRef.current, {
+        if (!value) {
+            gsap.to(ref.current, {
                 bottom: '-300%',
                 opacity: 0,
                 duration: 0.25,
                 ease: 'sine.out'
             })
-            setShowElem(false)
+            setActiveOverlayData('')
         } else {
-            gsap.to(ElemRef.current, {
+            gsap.to(ref.current, {
                 bottom: '100%',
                 opacity: 1,
                 duration: 0.5,
                 ease: 'circ.out'
             })
-            setShowElem(true)
+            setActiveOverlayData(value)
         }
     }
 
@@ -70,21 +69,24 @@ const PrimaryControls = ({
                     },
                 ].map(({ Control, icon }) => {
 
-                    const Icon = Control !== 'More' ? Icons[icon] : showContextControl ? Icons['X'] : Icons[icon]
+                    const Icon = Icons[icon]
                     return <div
                         key={Control}
                         onClick={() => {
-                            if (Control === 'More') {
-                                AnimateOverlay(showContextControl, setShowContextControl, ContextControlRef)
-                                return;
-                            }
-                            if (Control === 'Settings') {
-                                AnimateOverlay(showSettings, setShowSettings, SettingRef)
-                                return;
-                            }
-                            else {
+                            if (Control !== 'More' && Control !== 'Settings') {
                                 toast.info('Adding Soon...')
+                                return;
                             }
+                            if (!activeOverlayData) {
+                                AnimateOverlay(Control)
+                                return;
+                            }
+                            if (Control === activeOverlayData) {
+                                AnimateOverlay('')
+                                return;
+                            }
+                            AnimateOverlay(Control)
+
                         }}
                         className={`active:scale-95 overflow-hidden flex flex-col items-center justify-center gap-0`}>
                         <button

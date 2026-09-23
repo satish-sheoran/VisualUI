@@ -4,11 +4,10 @@ import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
 import { toast } from 'react-toastify'
 import gsap from 'gsap'
 import {  useRef } from 'react'
-import { useGSAP } from '@gsap/react'
 
 const RangeStep = 5
 
-const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQuickControls, setShowQuickControls, zoom, setZoom, ref }) => {
+const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQuickControls, setShowQuickControls, zoom, setZoom }) => {
 
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const Device = useSelector(store => store.Preferences.Device)
@@ -18,22 +17,13 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
     // refs
     const QuickControlShowRef = useRef(null)
 
-    useGSAP(() => {
-        gsap.set(ref.current, {
-            bottom: '-300%',
-            opacity: 0
-        });
-    }, {scope : ref})
-
-
     return (
         <div
-            ref={ref}
             style={{
                 borderColor: Theme.third,
                 backgroundColor: Theme.header
             }}
-            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl px-[2.5%] py-4 h-fit`}
+            className={` w-full flex flex-col gap-4 border rounded-2xl px-[2.5%] py-4 h-fit`}
         >
             {/* select,drag and zoom controls */}
             <div className={`grid grid-cols-3 gap-2`}>
