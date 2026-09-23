@@ -14,10 +14,11 @@ zod
 
 
 what i did for this commit :
-feat(search): add animated search input for icons search
+Fix  : icon search overlap and wire up Canvas settings control
 
-- Shrinks input width dynamically when text is entered
-- Uses GSAP for smooth exponential easing transitions
+* Fixed a layering bug where the icon search area incorrectly appeared above the sticky icon info overlay.
+* Added functionality to open settings when a user clicks the "Settings" option in the Canvas primary controls.
+
 
 
 

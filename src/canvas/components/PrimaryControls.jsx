@@ -5,32 +5,35 @@ import { toast } from 'react-toastify'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
 import gsap from 'gsap'
 
-const PrimaryControls = ({ showContextControl, setShowContextControl, ContextControlRef }) => {
+const PrimaryControls = ({
+    showContextControl, setShowContextControl, ContextControlRef,
+    showSettings, setShowSettings, SettingRef
+}) => {
 
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
 
 
-    function AnimateContextControl() {
-        if (!ContextControlRef.current) return;
+    function AnimateOverlay(showElem, setShowElem, ElemRef) {
+        if (!ElemRef.current) return;
 
-        if (showContextControl) {
-            gsap.to(ContextControlRef.current, {
+        if (showElem) {
+            gsap.to(ElemRef.current, {
                 bottom: '-300%',
                 opacity: 0,
                 duration: 0.25,
                 ease: 'sine.out'
             })
-            setShowContextControl(false)
+            setShowElem(false)
         } else {
-            gsap.to(ContextControlRef.current, {
+            gsap.to(ElemRef.current, {
                 bottom: '100%',
                 opacity: 1,
                 duration: 0.5,
-                ease: 'circ.out' 
+                ease: 'circ.out'
             })
-            setShowContextControl(true)
+            setShowElem(true)
         }
     }
 
@@ -40,24 +43,21 @@ const PrimaryControls = ({ showContextControl, setShowContextControl, ContextCon
                 borderColor: Theme.third,
                 backgroundColor: Theme.header
             }}
-            className={`relative border rounded-2xl grid grid-cols-5 px-[2.5%] pt-2 pb-2 gap-4 overflow-hidden`}>
+            className={`relative border rounded-3xl grid grid-cols-5 px-[2.5%] pt-2 pb-2 gap-4 overflow-hidden`}>
 
             {
                 [
                     {
                         Control: 'Insert',
                         icon: 'Plus',
-                        performAction: ''
                     },
                     {
                         Control: 'Layers',
                         icon: 'Layers',
-                        performAction: ''
                     },
                     {
                         Control: 'Preview',
                         icon: 'Play',
-                        performAction: ''
                     },
                     {
                         Control: 'Settings',
@@ -67,17 +67,22 @@ const PrimaryControls = ({ showContextControl, setShowContextControl, ContextCon
                     {
                         Control: 'More',
                         icon: 'Ellipsis',
-                        performAction: AnimateContextControl
                     },
-                ].map(({ Control, icon, performAction }) => {
+                ].map(({ Control, icon }) => {
 
                     const Icon = Control !== 'More' ? Icons[icon] : showContextControl ? Icons['X'] : Icons[icon]
                     return <div
                         key={Control}
                         onClick={() => {
                             if (Control === 'More') {
-                                performAction()
-                            } else {
+                                AnimateOverlay(showContextControl, setShowContextControl, ContextControlRef)
+                                return;
+                            }
+                            if (Control === 'Settings') {
+                                AnimateOverlay(showSettings, setShowSettings, SettingRef)
+                                return;
+                            }
+                            else {
                                 toast.info('Adding Soon...')
                             }
                         }}

@@ -25,16 +25,6 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
         });
     }, {scope : ref})
 
-    // useGSAP(() => {
-    //     gsap.to(QuickControlShowRef.current, {
-    //         height: 0,
-    //         paddingTop: 0,
-    //         paddingBottom: 0,
-    //         opacity: 0,
-    //         duration: 0.3,
-    //         ease: 'power2.out'
-    //     })
-    // }, [])
 
     return (
         <div

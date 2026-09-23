@@ -4,6 +4,7 @@ import CanvasNav from './components/CanvasNav';
 import CanvasArea from './components/CanvasArea';
 import PrimaryControls from './components/PrimaryControls';
 import ContextControls from './components/ContextControls';
+import LoadSettingsPage from './components/LoadSettingsPage';
 
 const Canvas = ({ showBurger, setshowBurger }) => {
 
@@ -15,9 +16,12 @@ const Canvas = ({ showBurger, setshowBurger }) => {
     const [zoom, setZoom] = useState(100)
     const [opacity, setOpacity] = useState(100)
     const [showContextControl, setShowContextControl] = useState(false)
+    const [showSettings, setShowSettings] = useState(false)
+
 
     // refs
     const ContextControlRef = useRef(null) // ref used to animate (show/hide) context controls
+    const SettingRef = useRef(null) //used to animate (show/hide) settings area when user click "settings" named primary Control
 
     return (
         <section
@@ -52,11 +56,20 @@ const Canvas = ({ showBurger, setshowBurger }) => {
                             ref={ContextControlRef}
                         />
 
+                        {/* overlay of settings */}
+                        <LoadSettingsPage
+                            ref={SettingRef}
+                            setShowSettings={setShowSettings}
+                        />
+
                         {/* bottom controls : Inset,Preview,Setting,more and layers */}
                         <PrimaryControls
                             ContextControlRef={ContextControlRef}
                             showContextControl={showContextControl}
                             setShowContextControl={setShowContextControl}
+                            showSettings={showSettings}
+                            setShowSettings={setShowSettings}
+                            SettingRef={SettingRef}
                         />
                     </div>
                 </footer>

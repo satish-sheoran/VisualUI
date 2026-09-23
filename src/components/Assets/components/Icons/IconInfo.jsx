@@ -79,7 +79,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
 
 
     return (
-        <div className={`${showIconInfo.show ? 'block' : 'hidden'} sticky bottom-2 left-0`}>
+        <div className={`${showIconInfo.show ? 'block' : 'hidden'} sticky z-1 bottom-2 left-0`}>
             <div
                 ref={IconInfoRef}
                 style={{
