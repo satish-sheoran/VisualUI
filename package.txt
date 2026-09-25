@@ -14,10 +14,12 @@ zod
 
 
 what i did for last commit :
-Fix  : icon search overlap and wire up Canvas settings control
+feat(canvas) : Added Canva's Insert options's dynamic data
 
-* Fixed a layering bug where the icon search area incorrectly appeared above the sticky icon info overlay.
-* Added functionality to open settings when a user clicks the "Settings" option in the Canvas primary controls.
+- Remaining : To add Html Tags to add and other stuff
+- Added insertion button in place of copy field when an icon is clicked by opening in canvas
+- Fix some bugs
+
 
 
 

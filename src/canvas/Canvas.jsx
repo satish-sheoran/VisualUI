@@ -7,6 +7,7 @@ import ContextControls from './components/ContextControls';
 import LoadSettingsPage from './components/LoadSettingsPage';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import Insert from './components/Insert';
 
 const Canvas = ({ showBurger, setshowBurger }) => {
 
@@ -56,7 +57,7 @@ const Canvas = ({ showBurger, setshowBurger }) => {
                                 borderColor: Theme.third,
                                 backgroundColor: Theme.header
                             }}
-                            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl ${activeOverlayData === 'Settings'?'':'px-[2.5%] py-4'}  h-fit`}
+                            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl ${activeOverlayData === 'Settings' || activeOverlayData === 'Insert' ? '' : 'px-[2.5%] py-4'}  h-fit`}
                         >
                             {/* overlay where we do select ,drag, insert inside that element */}
                             {activeOverlayData === 'More' &&
@@ -74,6 +75,13 @@ const Canvas = ({ showBurger, setshowBurger }) => {
                             {/* overlay of settings */}
                             {activeOverlayData === 'Settings' &&
                                 <LoadSettingsPage
+                                    ref={OverlayRef}
+                                    setActiveOverlayData={setActiveOverlayData}
+                                />}
+
+                            {/* overlay of settings */}
+                            {activeOverlayData === 'Insert' &&
+                                <Insert
                                     ref={OverlayRef}
                                     setActiveOverlayData={setActiveOverlayData}
                                 />}

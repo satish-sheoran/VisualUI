@@ -15,6 +15,7 @@ import Projects from '../components/Projects/Projects'
 import Profile from '../components/Profile/Profile'
 import NewProjectPopUp from '../components/Common/NewProjectPopUp'
 import Canvas from '../canvas/Canvas'
+import { setShowCanvas } from '../store/features/Canvas'
 
 
 const FILES_SECTIONS = {
@@ -214,19 +215,21 @@ const WorkSpacePage = () => {
                             onClick={() => {
                                 dispatch(setActivePage({ newSection: 'Profile' }))
                                 setshowBurger(false)
+                                if (showCanvas) dispatch(setShowCanvas({ showCanvas: false }))
                             }}
                             style={{
                                 backgroundColor: Theme.sec,
                                 borderColor: Theme.third,
                                 color: Theme.primaryText
                             }}
-                            className={`border active:scale-95 border flex items-center justify-center p-1 rounded-full overflow-hidden`}>
+                            className={`border active:scale-95 flex items-center justify-center p-1 rounded-full overflow-hidden`}>
                             <ICONS.User size={25} strokeWidth={2.5} />
                         </p>
                         <p
                             onClick={() => {
                                 dispatch(setActivePage({ newSection: 'Profile' }))
                                 setshowBurger(false)
+                                if (showCanvas) dispatch(setShowCanvas({ showCanvas: false }))
                             }}
                             className={`max-w-[55%] active:scale-95 mr-3 flex flex-col`}>
                             <span style={{
@@ -290,8 +293,14 @@ const WorkSpacePage = () => {
 
                             return Icon && <div key={option}
                                 onClick={() => {
-                                    if (option === 'Home' || option === 'Projects' || option === 'Settings') dispatch(setActivePage({ newSection: option }))
-                                    else if (option === 'Templates' || option === 'Assets') dispatch(setActivePage({ newSection: 'Assets' }))
+                                    if (option === 'Home' || option === 'Projects' || option === 'Settings') {
+                                        dispatch(setActivePage({ newSection: option }))
+                                        if (showCanvas) dispatch(setShowCanvas({ showCanvas: false }))
+                                    }
+                                    else if (option === 'Templates' || option === 'Assets') {
+                                        dispatch(setActivePage({ newSection: 'Assets' }))
+                                        if (showCanvas) dispatch(setShowCanvas({ showCanvas: false }))
+                                    }
                                     else {
                                         toast.info('Adding Soon...')
                                     }

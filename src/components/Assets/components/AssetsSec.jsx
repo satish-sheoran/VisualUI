@@ -5,12 +5,9 @@ import Illustrations from './Illustrations'
 import { useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style'
 
-const AssetsSec = () => {
+const AssetsSec = ({ShowIntertion}) => {
 
-  const Device = useSelector(store => store.Preferences.Device)
   const Theme = useSelector((store) => store.Preferences.Theme)
-  const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-  const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
   const { Weights } = useSelector(store => store.Preferences.Font);
 
@@ -60,7 +57,7 @@ const AssetsSec = () => {
         >Illustrations</button>
       </div>
 
-      {activeAsset === 'Icons' && <Icons activeAsset={activeAsset}/>}
+      {activeAsset === 'Icons' && <Icons activeAsset={activeAsset} ShowIntertion={ShowIntertion} />}
       {activeAsset === 'Images' && <Images />}
       {activeAsset === 'Illustrations' && <Illustrations />}
     </div>

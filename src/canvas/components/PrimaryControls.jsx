@@ -73,7 +73,7 @@ const PrimaryControls = ({
                     return <div
                         key={Control}
                         onClick={() => {
-                            if (Control !== 'More' && Control !== 'Settings') {
+                            if (Control !== 'More' && Control !== 'Settings' && Control !== 'Insert') {
                                 toast.info('Adding Soon...')
                                 return;
                             }

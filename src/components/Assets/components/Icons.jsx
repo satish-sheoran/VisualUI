@@ -7,7 +7,7 @@ import gsap from 'gsap'
 import { toast } from 'react-toastify'
 import { useGSAP } from '@gsap/react'
 
-const Icons = ({ activeAsset }) => {
+const Icons = ({ activeAsset, ShowIntertion }) => {
 
     const Device = useSelector(store => store.Preferences.Device)
     const Theme = useSelector((store) => store.Preferences.Theme)
@@ -30,7 +30,7 @@ const Icons = ({ activeAsset }) => {
 
     // Derive a boolean so the effect only triggers when the state actually crosses the boundary
     const hasText = inputVal.trim().length > 0;
-    
+
     const filteredIcons = useMemo(() => {
         if (!inputVal.trim()) {
             return LUCID_ICONS;
@@ -153,7 +153,7 @@ const Icons = ({ activeAsset }) => {
                                 color: Theme.primaryText,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.3}rem`,
                                 fontFamily: Weights.Bold
-                            }} className={`text-center`}
+                            }} className={`font-bold text-center`}
                         >{`No results for "${inputVal}"`}</span>
 
                         <div
@@ -174,13 +174,17 @@ const Icons = ({ activeAsset }) => {
                                 fontSize: Sizes.Small,
                                 fontFamily: Weights.Bold
                             }}
-                            className={`mt-1 border w-fit rounded-2xl py-1.5 px-2 active:scale-95`}>Clear search & try again</button>
+                            className={`font-bold mt-1 border w-fit rounded-2xl py-1.5 px-2 active:scale-95`}>Clear search & try again</button>
                     </>
                 }
             </div>
 
             {showIconInfo.show &&
-                <IconInfo showIconInfo={showIconInfo} setShowIconInfo={setShowIconInfo} IconInfoRef={IconInfoRef} />
+                <IconInfo
+                    ShowIntertion={ShowIntertion} // used to show insert button
+                    showIconInfo={showIconInfo}
+                    setShowIconInfo={setShowIconInfo}
+                    IconInfoRef={IconInfoRef} />
             }
 
         </>

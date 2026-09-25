@@ -30,7 +30,7 @@ const LoadSettingsPage = ({ ref,setActiveOverlayData }) => {
             style={{
                 backgroundColor: Theme.header,
             }}
-            className={`w-full h-[70vh] flex flex-col gap-0 rounded-2xl pb-4  overflow-x-hidden overflow-y-auto`}>
+            className={`w-full h-[75vh] flex flex-col gap-0 rounded-2xl pb-4 overflow-x-hidden overflow-y-auto`}>
             <div
                 style={{
                     backgroundColor: Theme.header

@@ -18,7 +18,7 @@ const StrokeWidthChange = { title: 'Stroke Width', desc: 'Adjust the line thickn
 const JSXMsg = { msg: 'Get the React JSX code for this icon.', title: 'Copy JSX' }
 const ObjMsg = { msg: 'Get the icon metadata (name, size, etc.).', title: 'Copy Object' }
 
-const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
+const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef }) => {
 
     const Device = useSelector(store => store.Preferences.Device)
     const Theme = useSelector((store) => store.Preferences.Theme)
@@ -84,7 +84,9 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                 ref={IconInfoRef}
                 style={{
                     backgroundColor: Theme.header,
-                    borderColor: Theme.third
+                    borderColor: Theme.third,
+                    boxShadow: '0 0 10px 3px rgba(0, 0, 0, 0.1)'
+
                 }}
                 className={`rounded-2xl border h-full w-full px-[2.5%] py-4 flex flex-col gap-3`}>
 
@@ -108,14 +110,14 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                 color: Theme.primaryText,
                                 fontSize: Sizes.Regular,
                                 fontFamily: Weights.ExtraBold
-                            }}
+                            }} className={`font-black`}
                         >{showIconInfo?.icon?.name?.replace(/(?=[A-Z])/g, ' ')}</span>
                         <span
                             style={{
                                 color: Theme.secText,
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 0.8}rem`,
                                 fontFamily: Weights.SemiBold
-                            }}
+                            }} className={`font-semibold`}
                         >{Description}</span>
                     </div>
                     <div className={`ms-auto`}>
@@ -154,7 +156,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                         color: Theme.primaryText,
                                         fontSize: Sizes.Small,
                                         fontFamily: Weights.ExtraBold
-                                    }}
+                                    }} className={`font-black`}
                                 >{SizeChange.title}</span>
                                 <span
                                     style={{
@@ -172,7 +174,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                     fontFamily: Weights.SemiBold,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`
                                 }}
-                                className={`ms-auto border py-0.5 px-2 rounded-2xl`}
+                                className={`font-semibold ms-auto border py-0.5 px-2 rounded-2xl`}
                             >{size} px</p>
                         </div>
 
@@ -183,7 +185,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                 fontSize: Sizes.Small,
                                 fontFamily: Weights.Bold
                             }}
-                            className={`w-full flex items-center justify-center gap-2.5`}>
+                            className={`font-bold w-full flex items-center justify-center gap-2.5`}>
                             <button
                                 onClick={() => setSize((prev) => prev - SizeStep < 5 ? 5 : prev - SizeStep)}
                                 style={{
@@ -245,7 +247,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                     color: Theme.primaryText,
                                     fontSize: Sizes.Small,
                                     fontFamily: Weights.ExtraBold
-                                }}>{StrokeWidthChange.title}</span>
+                                }} className={`font-black`}>{StrokeWidthChange.title}</span>
                                 <span
                                     style={{
                                         color: Theme.secText,
@@ -262,7 +264,7 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                                     fontFamily: Weights.SemiBold,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`
                                 }}
-                                className={`ms-auto border py-0.5 px-2 rounded-2xl`}
+                                className={`font-semibold ms-auto border py-0.5 px-2 rounded-2xl`}
                             >{strokeWidth} px</p>
                         </div>
 
@@ -312,97 +314,109 @@ const IconInfo = ({ showIconInfo, setShowIconInfo, IconInfoRef }) => {
                 </div>
 
                 {/* copy sec */}
-                <div className={`grid grid-cols-2 gap-2`}>
-                    {/* copy jsx */}
-                    <div
+                {ShowIntertion ?
+                    <button
+                    onClick={()=>toast.info('Adding soon...')}
                         style={{
-                            borderColor: Theme.third
+                            borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
+                            backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
+                            fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`,
+                            fontFamily: Weights.Bold,
+                            color: COMMON_COLORS.White
                         }}
-                        className={`border flex flex-col px-2 py-1.5 gap-3 items-center justify-center rounded-2xl overflow-hidden`}>
-                        <div className={`flex items-start gap-2.5`}>
-                            <div
-                                style={{
-                                    borderColor: Theme.third,
-                                    backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
-                                    color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
-                                }}
-                                className={`p-1.5 rounded-lg flex items-center justify-center border`}><CodeXml size={22} strokeWidth={2.5} /></div>
+                        className={`font-bold active:scale-95 border rounded-2xl py-2`}
+                    >Insert to Canvas</button>
+                    : <div className={`grid grid-cols-2 gap-2`}>
+                        {/* copy jsx */}
+                        <div
+                            style={{
+                                borderColor: Theme.third
+                            }}
+                            className={`border flex flex-col px-2 py-1.5 gap-3 items-center justify-center rounded-2xl overflow-hidden`}>
+                            <div className={`flex items-start gap-2.5`}>
+                                <div
+                                    style={{
+                                        borderColor: Theme.third,
+                                        backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
+                                        color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                                    }}
+                                    className={`p-1.5 rounded-lg flex items-center justify-center border`}><CodeXml size={22} strokeWidth={2.5} /></div>
 
-                            <div className={`flex flex-col gap-1`}>
-                                <span
-                                    style={{
-                                        color: Theme.primaryText,
-                                        fontSize: Sizes.Small,
-                                        fontFamily: Weights.ExtraBold
-                                    }}>{JSXMsg.title}</span>
-                                <span
-                                    style={{
-                                        color: Theme.secText,
-                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.75}rem`,
-                                        fontFamily: Weights.Regular
-                                    }}>{JSXMsg.msg}</span>
+                                <div className={`flex flex-col gap-1`}>
+                                    <span
+                                        style={{
+                                            color: Theme.primaryText,
+                                            fontSize: Sizes.Small,
+                                            fontFamily: Weights.ExtraBold
+                                        }} className={`font-black`}>{JSXMsg.title}</span>
+                                    <span
+                                        style={{
+                                            color: Theme.secText,
+                                            fontSize: `${(Sizes.Small.slice(0, -3)) * 0.75}rem`,
+                                            fontFamily: Weights.Regular
+                                        }}>{JSXMsg.msg}</span>
+                                </div>
+
                             </div>
 
+                            <button
+                                onClick={() => CopyJSX(showIconInfo?.icon?.name)}
+                                style={{
+                                    color: COMMON_COLORS.White,
+                                    borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Bg_Clr,
+                                    backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Hover_Clr,
+                                    fontSize: Sizes.Small,
+                                    fontFamily: Weights.Bold
+                                }}
+                                className={`font-bold w-full border rounded-2xl py-1.5 active:scale-95`}>{JSXMsg.title}</button>
                         </div>
 
-                        <button
-                            onClick={() => CopyJSX(showIconInfo?.icon?.name)}
+                        {/* copy object */}
+                        <div
                             style={{
-                                color: COMMON_COLORS.White,
-                                borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Bg_Clr,
-                                backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red').Hover_Clr,
-                                fontSize: Sizes.Small,
-                                fontFamily: Weights.Bold
+                                borderColor: Theme.third
                             }}
-                            className={`w-full border rounded-2xl py-1.5 active:scale-95`}>{JSXMsg.title}</button>
-                    </div>
+                            className={`border flex flex-col px-2 py-1.5 gap-3 items-center justify-center rounded-2xl overflow-hidden`}>
+                            <div className={`flex items-start gap-2.5`}>
+                                <div
+                                    style={{
+                                        borderColor: Theme.third,
+                                        backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
+                                        color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                                    }}
+                                    className={`p-1.5 rounded-lg flex items-center justify-center border`}>
+                                    <Braces size={20} strokeWidth={2.5} />
+                                </div>
+                                <div className={`flex flex-col gap-1`}>
+                                    <span
+                                        style={{
+                                            color: Theme.primaryText,
+                                            fontSize: Sizes.Small,
+                                            fontFamily: Weights.ExtraBold
+                                        }} className={`font-black`}
+                                    >{ObjMsg.title}</span>
+                                    <span
+                                        style={{
+                                            color: Theme.secText,
+                                            fontSize: `${(Sizes.Small.slice(0, -3)) * 0.75}rem`,
+                                            fontFamily: Weights.Regular
+                                        }}
+                                    >{ObjMsg.msg}</span>
+                                </div>
+                            </div>
 
-                    {/* copy object */}
-                    <div
-                        style={{
-                            borderColor: Theme.third
-                        }}
-                        className={`border flex flex-col px-2 py-1.5 gap-3 items-center justify-center rounded-2xl overflow-hidden`}>
-                        <div className={`flex items-start gap-2.5`}>
-                            <div
+                            <button
+                                onClick={() => CopyObject(showIconInfo?.icon?.name)}
                                 style={{
+                                    color: Theme.primaryText,
                                     borderColor: Theme.third,
-                                    backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
-                                    color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE
+                                    backgroundColor: Theme.bg,
+                                    fontSize: Sizes.Small,
+                                    fontFamily: Weights.Bold
                                 }}
-                                className={`p-1.5 rounded-lg flex items-center justify-center border`}>
-                                <Braces size={20} strokeWidth={2.5} />
-                            </div>
-                            <div className={`flex flex-col gap-1`}>
-                                <span
-                                    style={{
-                                        color: Theme.primaryText,
-                                        fontSize: Sizes.Small,
-                                        fontFamily: Weights.ExtraBold
-                                    }}
-                                >{ObjMsg.title}</span>
-                                <span
-                                    style={{
-                                        color: Theme.secText,
-                                        fontSize: `${(Sizes.Small.slice(0, -3)) * 0.75}rem`,
-                                        fontFamily: Weights.Regular
-                                    }}
-                                >{ObjMsg.msg}</span>
-                            </div>
+                                className={`font-bold w-full border rounded-2xl py-1.5 active:scale-95`}>{ObjMsg.title}</button>
                         </div>
-
-                        <button
-                            onClick={() => CopyObject(showIconInfo?.icon?.name)}
-                            style={{
-                                color: Theme.primaryText,
-                                borderColor: Theme.third,
-                                backgroundColor: Theme.bg,
-                                fontSize: Sizes.Small,
-                                fontFamily: Weights.Bold
-                            }}
-                            className={`w-full border rounded-2xl py-1.5 active:scale-95`}>{ObjMsg.title}</button>
-                    </div>
-                </div>
+                    </div>}
 
 
             </div>
