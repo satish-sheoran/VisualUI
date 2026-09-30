@@ -13,12 +13,12 @@ zod
 @hookform/resolvers
 
 
-what i did for last commit :
-feat(canvas) : Added Canva's Insert options's dynamic data
+what i did for this commit :
+feat(Canvas) : Added Html Tags In Insert's element area
 
-- Remaining : To add Html Tags to add and other stuff
-- Added insertion button in place of copy field when an icon is clicked by opening in canvas
-- Fix some bugs
+- Added Preview Mode, Copy The Adding Element JSX CODE
+- Animations of Showing/Closing Preview Mode
+- Auto Scrolls to Show Preview Mode on Screen when Previewing an Element before adding
 
 
 

@@ -20,13 +20,11 @@ const ObjMsg = { msg: 'Get the icon metadata (name, size, etc.).', title: 'Copy 
 
 const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef }) => {
 
-    const Device = useSelector(store => store.Preferences.Device)
     const Theme = useSelector((store) => store.Preferences.Theme)
-    const { Speed } = useSelector(store => store.Preferences.AnimationTypeNSpeed) //animation speed
-    const { Animation } = useSelector(store => store.Preferences.AnimationName) //animation name
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
 
+    // states
     const [size, setSize] = useState(18)
     const [strokeWidth, setStrokeWidth] = useState(2)
 
@@ -316,7 +314,7 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef })
                 {/* copy sec */}
                 {ShowIntertion ?
                     <button
-                    onClick={()=>toast.info('Adding soon...')}
+                        onClick={() => toast.info('Adding soon...')}
                         style={{
                             borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
                             backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,

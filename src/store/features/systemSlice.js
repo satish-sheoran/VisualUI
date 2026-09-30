@@ -5,7 +5,7 @@ import { INITIAL_SETTINGS } from "../../constants/Settings";
 const systemSlice = createSlice({
     name: 'systemSlice',
     initialState: {
-        userDetails: {userName: 'Ram', email: 'ram@gmail.com', password: 'ram12&'  },
+        userDetails: { },
         CurrentPage: 'WorkSpacePage',
         ActivePage: 'Home',
         Settings: INITIAL_SETTINGS

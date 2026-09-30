@@ -8,6 +8,11 @@ import LoadingInitialPage from './Pages/LoadingInitialPage'
 import SignUpPage from './Pages/SignUpPage'
 import LoginPage from './Pages/LoginPage'
 import { Slide, ToastContainer } from "react-toastify";
+import gsap from "gsap"
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+gsap.registerPlugin(ScrollToPlugin);
+
 
 const ALL_PAGES = {
   'GetStartedPage': GetStartedPage,
