@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Check, Copy, SquareArrowRightEnter } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { copyToClipboard } from '../../../utils/HelperFns';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { addElementToProject } from '../../../store/features/Canvas';
 
-const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef }) => {
+const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef, closeOverlay }) => {
 
     //  attribut and html show code 
     const attributesCODE = Object.entries(selectedTag?.attributes || {})
@@ -18,11 +19,11 @@ const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef }) 
     const HTMLEndCode = `</${selectedTag?.tag}>`
 
 
-
+    const dispatch = useDispatch()
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
-
+    const activeProject = useSelector((store) => store.Canvas.WorkingProject)
 
     // copy html preview code
     const copyHTMLCODE = async (Tag, Type, Content, attri) => {
@@ -46,17 +47,18 @@ const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef }) 
         }
     }
 
-    // useGSAP(() => {
-    //     if (!ref.current) return;
+    // intially hide it 
+    useGSAP(() => {
+        if (!ref.current) return;
 
-    //     gsap.set(ref.current, {
-    //         height: 0,
-    //         paddingBottom: 0,
-    //         paddingTop: 0,
-    //         border: 'none'
-    //     })
+        gsap.set(ref.current, {
+            height: 0,
+            paddingBottom: 0,
+            paddingTop: 0,
+            border: 'none'
+        })
 
-    // }, [])
+    }, [])
 
     return (
         <div ref={ref}
@@ -106,8 +108,8 @@ const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef }) 
                 {/* code */}
                 <div
                     style={{
-                        borderColor: Theme.Theme !== 'Dark' ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue').Hover_Clr:
-                        ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Slate_Gray').Hover_Clr,
+                        borderColor: Theme.Theme !== 'Dark' ? ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue').Hover_Clr :
+                            ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Slate_Gray').Hover_Clr,
                         backgroundColor: Theme.header
                     }}
                     className={`border py-2 pr-2 pl-4 rounded-2xl flex flex-col justify-center `}>
@@ -196,7 +198,10 @@ const PreviewCode = ({ ref, selectedTag, canCopy, setCanCopy, CopyTimeOutRef }) 
 
             {/* insert button */}
             <button
-                onClick={() => toast.info('Adding...')}
+                onClick={() => {
+                    dispatch(addElementToProject({ projectId: activeProject.id, element: selectedTag }))
+                    closeOverlay()
+                }}
                 style={{
                     borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple')?.Bg_Clr,
                     backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue')?.CODE,

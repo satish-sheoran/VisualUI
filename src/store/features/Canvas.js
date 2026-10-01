@@ -73,10 +73,22 @@ const CanvasSlice = createSlice({
         setWorkingProject(state, action) {
             const { project } = action.payload
             state.WorkingProject = project;
+        },
+        addElementToProject(state, action) {
+            const { projectId, element } = action.payload;
+            if (!projectId || !element) return;
+            // 1. Update the state by mapping through the projects
+            state.Projects = state.Projects.map((Project) =>
+                Project.id === projectId
+                    ? { ...Project, elements: [...Project.elements, element] }
+                    : Project
+            );
+            // 2. Save the updated state directly to localStorage
+            localStorage.setItem('CanvasProject', JSON.stringify([...state.Projects]))
         }
     }
 })
 
-export const { setShowCanvas, AddProject, setWorkingProject, AddToFavourite, UpdateProjectDetails } = CanvasSlice.actions;
+export const { setShowCanvas, AddProject, setWorkingProject, AddToFavourite, UpdateProjectDetails, addElementToProject } = CanvasSlice.actions;
 
 export default CanvasSlice.reducer;

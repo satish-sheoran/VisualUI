@@ -14,11 +14,11 @@ zod
 
 
 what i did for this commit :
-feat(Canvas) : Added Html Tags In Insert's element area
+feat(Canvas) : Can add Html Elements and Icons
 
-- Added Preview Mode, Copy The Adding Element JSX CODE
-- Animations of Showing/Closing Preview Mode
-- Auto Scrolls to Show Preview Mode on Screen when Previewing an Element before adding
+- HTML Elements and Icons from assets now can be added to projects
+- FIX Some Bugs
+TODO : Showcase these added elements to Canvas
 
 
 

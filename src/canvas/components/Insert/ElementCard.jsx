@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import * as ICONS from 'lucide-react';
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import gsap from 'gsap';
+import { addElementToProject } from '../../../store/features/Canvas';
 
-const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTimeOutRef, PreviewRef }) => {
+const ElementCard = ({ selectedTag, element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTimeOutRef, PreviewRef, closeOverlay }) => {
 
+    const dispatch = useDispatch()
     const { Sizes } = useSelector(store => store.Preferences.FontSize);
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme);
+    const activeProject = useSelector((store) => store.Canvas.WorkingProject)
+
 
     const hasVariants = element?.variants?.length > 0;
     const Icon = ICONS[element.icon];
@@ -20,10 +24,23 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
     // Reusable handler to accurately construct the canvas element payload
     const handleSelectVariant = (variant) => {
         const isInput = element.type === 'input';
+        const date = new Date();
         const defaultContent = element.category === 'text' ? 'Default' : '';
+        let uniqueCodeExists;
+        let uniqueCode;
 
+        // generating a unique code for the element to be added to the canvas and to handle future tasks like deleting or removing it
+        do {
+            // 1. Generate the ID
+            uniqueCode = Math.random().toString(36).substring(2, 9) + date.getTime().toString(36);
+
+            // 2. Check if it already exists in the array
+            uniqueCodeExists = activeProject.elements.some(({ uniqueCode: ID }) => ID === uniqueCode);
+
+        } while (uniqueCodeExists);
 
         setSelectedElem({
+            uniqueCode,
             id: variant.id,
             type: element.type,
             tag: variant.tag,
@@ -32,6 +49,7 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
             attributes: variant.attributes || {},
             x: 100,
             y: 100,
+            className: uniqueCode,
             // Custom sizing tailored by element category type
             width: isInput || element.type === 'text' ? 200 : 300,
             height: isInput || element.type === 'text' ? 50 : 300,
@@ -46,9 +64,9 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
     };
 
     const handleChooseElement = () => {
-        toast.info("Adding Soon...");
         // Dispatch to your canvas Redux store or call a prop function here:
-        // dispatch(addElementToCanvas(selectedElem))
+        dispatch(addElementToProject({ projectId: activeProject.id, element: selectedTag }))
+        closeOverlay()
     };
 
     // Sync state if the active element card changes, or fallback to default variants
@@ -188,10 +206,11 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
                             height: 0,
                             paddingBottom: 0,
                             paddingTop: 0,
-                            border : 'none',
+                            border: 'none',
                             duration: 0.25,
                             ease: 'sine.in'
                         })
+
                     }}
                     style={{
                         borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Blue')?.Bg_Clr,

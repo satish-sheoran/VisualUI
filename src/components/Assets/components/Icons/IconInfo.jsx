@@ -4,11 +4,12 @@
 import { Braces, CodeXml, Maximize2, Minus, PencilLine, Plus, X } from 'lucide-react'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../../constants/style'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { copyToClipboard } from '../../../../utils/HelperFns'
+import { addElementToProject } from '../../../../store/features/Canvas'
 
 const SizeStep = 2
 const StrokeStep = 0.5
@@ -18,11 +19,13 @@ const StrokeWidthChange = { title: 'Stroke Width', desc: 'Adjust the line thickn
 const JSXMsg = { msg: 'Get the React JSX code for this icon.', title: 'Copy JSX' }
 const ObjMsg = { msg: 'Get the icon metadata (name, size, etc.).', title: 'Copy Object' }
 
-const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef }) => {
+const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef ,closeOverlay}) => {
 
+    const dispatch = useDispatch()
     const Theme = useSelector((store) => store.Preferences.Theme)
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const { Weights } = useSelector(store => store.Preferences.Font);
+    const activeProject = useSelector((store) => store.Canvas.WorkingProject)
 
     // states
     const [size, setSize] = useState(18)
@@ -314,7 +317,44 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef })
                 {/* copy sec */}
                 {ShowIntertion ?
                     <button
-                        onClick={() => toast.info('Adding soon...')}
+                        onClick={() => {
+                            let date = new Date();
+                            let uniqueCodeExists;
+                            let uniqueCode;
+
+                            // generating a unique code for the element to be added to the canvas and to handle future tasks like deleting or removing it
+                            do {
+                                // 1. Generate the ID
+                                uniqueCode = Math.random().toString(36).substring(2, 9) + date.getTime().toString(36);
+
+                                // 2. Check if it already exists in the array
+                                uniqueCodeExists = activeProject.elements.some(({ uniqueCode: ID }) => ID === uniqueCode);
+
+                            } while (uniqueCodeExists);
+
+                            let element = {
+                                uniqueCode,
+                                id: showIconInfo.name,
+                                type: 'Icon',
+                                tag: 'Icon',
+                                variantId: null, // Track unique variant ID to safely fix border states
+                                content: [],
+                                attributes: { size, strokeWidth },
+                                x: 100,
+                                y: 100,
+                                className: uniqueCode,
+                                // Custom sizing tailored by element category type
+                                width: 'fit',
+                                height: 'fit',
+                                styles: {
+                                    color: Theme.primaryText // Fixed your typo here!
+                                }
+                            }
+
+                            dispatch(addElementToProject({ projectId: activeProject.id, element }))
+                            setShowIconInfo({ show: false, icon: {} })
+                            closeOverlay()
+                        }}
                         style={{
                             borderColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
                             backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
@@ -418,7 +458,7 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef })
 
 
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -4,7 +4,7 @@ import { ELEMENTS } from '../../../constants/Elements/ElemDefinition';
 import ElementCard from './ElementCard';
 import PreviewCode from './PreviewCode';
 
-const HTMLElements = () => {
+const HTMLElements = ({closeOverlay}) => {
 
     const Theme = useSelector((store) => store.Preferences.Theme)
 
@@ -31,17 +31,20 @@ const HTMLElements = () => {
                 selectedTag={selectedTag}
                 canCopy={canCopy}
                 setCanCopy={setCanCopy}
-                CopyTimeOutRef={CopyTimeOutRef} />
+                CopyTimeOutRef={CopyTimeOutRef}
+                closeOverlay={closeOverlay}  />
 
             {ELEMENTS.map((element) => {
                 return <ElementCard
                     key={element.id}
                     ParentBoxRef={ParentBoxRef}
                     element={element}
+                    selectedTag={selectedTag}
                     setSelectedTag={setSelectedTag}
                     setCanCopy={setCanCopy}
                     CopyTimeOutRef={CopyTimeOutRef}
                     PreviewRef={PreviewRef}
+                    closeOverlay={closeOverlay} 
                 />
             })}
 

@@ -77,9 +77,9 @@ const Insert = ({ ref, setActiveOverlayData }) => {
                 </div>
 
 
-                {activeInsertPage === 'Elements' && <HTMLElements />}
+                {activeInsertPage === 'Elements' && <HTMLElements closeOverlay={Close} />}
                 {activeInsertPage === 'Templates' && <Templates />}
-                {activeInsertPage === 'Assets' && <AssetsSec ShowIntertion={true}/>}
+                {activeInsertPage === 'Assets' && <AssetsSec ShowIntertion={true} closeOverlay={Close} />}
             </div>
         </div>
     )

@@ -4,10 +4,9 @@ import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style'
 import { Fish, icons as ICONS, Search, SearchAlert, X } from 'lucide-react'
 import IconInfo from './Icons/IconInfo'
 import gsap from 'gsap'
-import { toast } from 'react-toastify'
 import { useGSAP } from '@gsap/react'
 
-const Icons = ({ activeAsset, ShowIntertion }) => {
+const Icons = ({ activeAsset, ShowIntertion ,closeOverlay}) => {
 
     const Device = useSelector(store => store.Preferences.Device)
     const Theme = useSelector((store) => store.Preferences.Theme)
@@ -184,7 +183,9 @@ const Icons = ({ activeAsset, ShowIntertion }) => {
                     ShowIntertion={ShowIntertion} // used to show insert button
                     showIconInfo={showIconInfo}
                     setShowIconInfo={setShowIconInfo}
-                    IconInfoRef={IconInfoRef} />
+                    IconInfoRef={IconInfoRef}
+                    closeOverlay={closeOverlay}
+                     />
             }
 
         </>

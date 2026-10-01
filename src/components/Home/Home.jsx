@@ -22,7 +22,7 @@ const Tools = [
 
 ]
 
-const Home = ({setShowNewProjectPopUp}) => {
+const Home = ({ setShowNewProjectPopUp }) => {
 
   const dispatch = useDispatch()
   const Theme = useSelector((store) => store.Preferences.Theme)
@@ -74,7 +74,7 @@ const Home = ({setShowNewProjectPopUp}) => {
             }} className={`font-semibold`}>Start from scratch</span>
           </div>
 
-          <div onClick={() => dispatch(setActivePage({newSection : 'Assets'}))} style={{
+          <div onClick={() => dispatch(setActivePage({ newSection: 'Assets' }))} style={{
             backgroundColor: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').Bg_Clr,
             borderColor: Theme.third,
           }}
@@ -105,14 +105,14 @@ const Home = ({setShowNewProjectPopUp}) => {
               fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
             }} className={`font-black`}>Recent Projects</p>
             {AllProjects.length > 0 && <p
-              onClick={() => dispatch(setActivePage({newSection : 'Projects'}))}
+              onClick={() => dispatch(setActivePage({ newSection: 'Projects' }))}
               style={{
                 color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Purple').CODE,
                 fontFamily: Weights.Bold,
                 fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`
-              }} 
+              }}
               className="font-bold active:scale-95"
-              >See All</p>}
+            >See All</p>}
           </div>
 
           {/* projects old */}
@@ -122,6 +122,7 @@ const Home = ({setShowNewProjectPopUp}) => {
               const timeAgo = getTimeAgo(Project.updatedAt) // getting times ago it was updated
 
               return <div
+                key={Project.id}
                 onClick={(e) => {
                   e.stopPropagation()
                   dispatch(setWorkingProject({ project: Project }))
@@ -154,7 +155,7 @@ const Home = ({setShowNewProjectPopUp}) => {
                 <div
                   className={`p-1 rounded-full flex items-center justify-center`}
                 >
-                  <Icons.ChevronRight style={{color : Theme.primaryText}} strokeWidth={2.5} size={25} />
+                  <Icons.ChevronRight style={{ color: Theme.primaryText }} strokeWidth={2.5} size={25} />
                 </div>
               </div>
             }) :

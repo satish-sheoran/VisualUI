@@ -5,7 +5,7 @@ import Illustrations from './Illustrations'
 import { useSelector } from 'react-redux'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style'
 
-const AssetsSec = ({ShowIntertion}) => {
+const AssetsSec = ({ShowIntertion,closeOverlay}) => {
 
   const Theme = useSelector((store) => store.Preferences.Theme)
   const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
@@ -57,7 +57,7 @@ const AssetsSec = ({ShowIntertion}) => {
         >Illustrations</button>
       </div>
 
-      {activeAsset === 'Icons' && <Icons activeAsset={activeAsset} ShowIntertion={ShowIntertion} />}
+      {activeAsset === 'Icons' && <Icons activeAsset={activeAsset} ShowIntertion={ShowIntertion} closeOverlay={closeOverlay}/>}
       {activeAsset === 'Images' && <Images />}
       {activeAsset === 'Illustrations' && <Illustrations />}
     </div>

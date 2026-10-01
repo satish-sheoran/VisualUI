@@ -21,7 +21,7 @@ const CanvasNav = ({ setshowBurger }) => {
                     dispatch(setWorkingProject({ project: null }))
                 }}
                 className={`h-full`}>
-                <Icons.ArrowLeft size={22} strokeWidth={2.5} />
+                <Icons.ArrowLeft style={{color : Theme.primaryText}} size={22} strokeWidth={2.5} />
             </div>
             <p
                 style={{
