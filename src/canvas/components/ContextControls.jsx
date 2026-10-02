@@ -23,7 +23,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                 borderColor: Theme.third,
                 backgroundColor: Theme.header
             }}
-            className={` w-full flex flex-col gap-4 border rounded-2xl px-[2.5%] py-4 h-fit`}
+            className={`w-full flex flex-col gap-4 rounded-2xl px-[2.5%] py-4 h-fit`}
         >
             {/* select,drag and zoom controls */}
             <div className={`grid grid-cols-3 gap-2`}>

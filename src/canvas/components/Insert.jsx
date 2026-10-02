@@ -36,7 +36,7 @@ const Insert = ({ ref, setActiveOverlayData }) => {
             className={`w-full h-[75vh] flex flex-col gap-0 rounded-2xl pb-4 px-0 pt-0 overflow-x-hidden overflow-y-auto`}>
             <div
                 style={{
-                    backgroundColor: Theme.header
+                    backgroundColor: Theme.bg
                 }} className={`w-full flex items-center justify-end px-2 py-2`}>
                 <button
                     onClick={() => Close()}

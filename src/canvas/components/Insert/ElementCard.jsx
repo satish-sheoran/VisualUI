@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import gsap from 'gsap';
 import { addElementToProject } from '../../../store/features/Canvas';
 
-const ElementCard = ({ selectedTag, element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTimeOutRef, PreviewRef, closeOverlay }) => {
+const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTimeOutRef, PreviewRef, closeOverlay }) => {
 
     const dispatch = useDispatch()
     const { Sizes } = useSelector(store => store.Preferences.FontSize);
@@ -49,6 +49,7 @@ const ElementCard = ({ selectedTag, element, ParentBoxRef, setSelectedTag, setCa
             attributes: variant.attributes || {},
             x: 100,
             y: 100,
+            elements : [],
             className: uniqueCode,
             // Custom sizing tailored by element category type
             width: isInput || element.type === 'text' ? 200 : 300,
@@ -63,9 +64,9 @@ const ElementCard = ({ selectedTag, element, ParentBoxRef, setSelectedTag, setCa
         });
     };
 
-    const handleChooseElement = () => {
+    const handleChooseElement = (elem) => {
         // Dispatch to your canvas Redux store or call a prop function here:
-        dispatch(addElementToProject({ projectId: activeProject.id, element: selectedTag }))
+        dispatch(addElementToProject({ projectId: activeProject.id, element: elem }))
         closeOverlay()
     };
 
@@ -199,7 +200,7 @@ const ElementCard = ({ selectedTag, element, ParentBoxRef, setSelectedTag, setCa
                 </button>
                 <button
                     onClick={() => {
-                        handleChooseElement()
+                        handleChooseElement(selectedElem)
                         clearTimeout(CopyTimeOutRef.current)
                         setCanCopy(true)
                         gsap.to(PreviewRef.current, {

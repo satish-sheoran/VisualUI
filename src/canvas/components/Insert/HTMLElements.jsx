@@ -39,7 +39,6 @@ const HTMLElements = ({closeOverlay}) => {
                     key={element.id}
                     ParentBoxRef={ParentBoxRef}
                     element={element}
-                    selectedTag={selectedTag}
                     setSelectedTag={setSelectedTag}
                     setCanCopy={setCanCopy}
                     CopyTimeOutRef={CopyTimeOutRef}

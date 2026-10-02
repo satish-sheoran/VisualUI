@@ -19,7 +19,7 @@ const StrokeWidthChange = { title: 'Stroke Width', desc: 'Adjust the line thickn
 const JSXMsg = { msg: 'Get the React JSX code for this icon.', title: 'Copy JSX' }
 const ObjMsg = { msg: 'Get the icon metadata (name, size, etc.).', title: 'Copy Object' }
 
-const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef ,closeOverlay}) => {
+const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef, closeOverlay }) => {
 
     const dispatch = useDispatch()
     const Theme = useSelector((store) => store.Preferences.Theme)
@@ -339,6 +339,7 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef ,c
                                 tag: 'Icon',
                                 variantId: null, // Track unique variant ID to safely fix border states
                                 content: [],
+                                elements: [],
                                 attributes: { size, strokeWidth },
                                 x: 100,
                                 y: 100,

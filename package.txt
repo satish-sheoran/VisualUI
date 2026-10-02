@@ -14,11 +14,17 @@ zod
 
 
 what i did for this commit :
-feat(Canvas) : Can add Html Elements and Icons
+feat(settings): initialize settings persistence and state synchronization
 
-- HTML Elements and Icons from assets now can be added to projects
-- FIX Some Bugs
-TODO : Showcase these added elements to Canvas
+Context:
+User configuration choices were previously lost on page refresh.
+
+Changes:
+1. Integrated localStorage updates directly into the updateSetting reducer action.
+2. Created a robust data pipeline in GetSavedSettings that maps configuration inputs into high-performance validation Sets.
+3. Enforced type checking and value whitelisting to safeguard initialization state against manipulated storage strings.
+
+TODO : Showcase added elements to Canvas on Canvas Area
 
 
 
