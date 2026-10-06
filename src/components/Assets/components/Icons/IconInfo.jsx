@@ -77,8 +77,6 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef, c
     }
 
 
-
-
     return (
         <div className={`${showIconInfo.show ? 'block' : 'hidden'} sticky z-1 bottom-2 left-0`}>
             <div
@@ -336,19 +334,22 @@ const IconInfo = ({ ShowIntertion, showIconInfo, setShowIconInfo, IconInfoRef, c
                                 uniqueCode,
                                 id: showIconInfo.name,
                                 type: 'Icon',
-                                tag: 'Icon',
+                                tag: showIconInfo.icon.name,
                                 variantId: null, // Track unique variant ID to safely fix border states
                                 content: [],
                                 elements: [],
                                 attributes: { size, strokeWidth },
-                                x: 100,
-                                y: 100,
+                                x: Math.round(Math.random() * 200),
+                                y: Math.round(Math.random() * 200),
                                 className: uniqueCode,
                                 // Custom sizing tailored by element category type
                                 width: 'fit',
                                 height: 'fit',
                                 styles: {
-                                    color: Theme.primaryText // Fixed your typo here!
+                                    borderWidth: '2px',
+                                    borderStyle: 'solid',
+                                    borderRadius: '10px',
+                                    zIndex: 1,
                                 }
                             }
 

@@ -14,20 +14,14 @@ zod
 
 
 what i did for this commit :
-feat(settings): initialize settings persistence and state synchronization
+feat(canvas) : Showcased element and selecting them on Canvas 
 
-Context:
-User configuration choices were previously lost on page refresh.
+- Element can be selected on canvas and active element will have accent coloured border
+- Synced Input elements value to Store
 
-Changes:
-1. Integrated localStorage updates directly into the updateSetting reducer action.
-2. Created a robust data pipeline in GetSavedSettings that maps configuration inputs into high-performance validation Sets.
-3. Enforced type checking and value whitelisting to safeguard initialization state against manipulated storage strings.
-
-TODO : Showcase added elements to Canvas on Canvas Area
-
-
-
+TODO For Next Commit: 
+1. Synced or let user change Text elements text
+2. Show element based controls in More option Section
 
 
 Suggestion :

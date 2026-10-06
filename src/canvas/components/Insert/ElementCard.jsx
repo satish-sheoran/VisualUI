@@ -25,7 +25,7 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
     const handleSelectVariant = (variant) => {
         const isInput = element.type === 'input';
         const date = new Date();
-        const defaultContent = element.category === 'text' ? 'Default' : '';
+        const defaultContent = element.category === 'text' ? element.name ?? 'Default' : '';
         let uniqueCodeExists;
         let uniqueCode;
 
@@ -47,19 +47,18 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
             variantId: variant.id, // Track unique variant ID to safely fix border states
             content: [defaultContent,],
             attributes: variant.attributes || {},
-            x: 100,
-            y: 100,
-            elements : [],
+            x: Math.round(Math.random() * 200),
+            y: Math.round(Math.random() * 200),
+            elements: [],
             className: uniqueCode,
             // Custom sizing tailored by element category type
-            width: isInput || element.type === 'text' ? 200 : 300,
-            height: isInput || element.type === 'text' ? 50 : 300,
+            width: isInput || element.type === 'text' ? 150 : Math.random() * 100 + 100,
+            height: isInput || element.type === 'text' ? 'fit' : Math.random() * 100 + 100,
             styles: {
-                border: `2px solid ${Theme.third}`,
-                borderRadius: '2px',
-                fontSize: '25px',
-                fontWeight: 700,
-                color: Theme.primaryText // Fixed your typo here!
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderRadius: '10px',
+                zIndex: 1,
             }
         });
     };
@@ -78,8 +77,22 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
             handleSelectVariant(defaultVar);
         } else {
             const defaultContent = element.category === 'text' ? 'Default' : '';
+            const date = new Date();
+            let uniqueCodeExists;
+            let uniqueCode;
+
+            // generating a unique code for the element to be added to the canvas and to handle future tasks like deleting or removing it
+            do {
+                // 1. Generate the ID
+                uniqueCode = Math.random().toString(36).substring(2, 9) + date.getTime().toString(36);
+
+                // 2. Check if it already exists in the array
+                uniqueCodeExists = activeProject.elements.some(({ uniqueCode: ID }) => ID === uniqueCode);
+
+            } while (uniqueCodeExists);
             // Elements without variants (like div, nav, footer, paragraph, span)
             setSelectedElem({
+                uniqueCode,
                 id: element.id,
                 type: element.type,
                 tag: element.tag,
@@ -88,14 +101,15 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
                 content: [defaultContent,],
                 x: 100,
                 y: 100,
-                width: element.type === 'text' ? 200 : 300,
-                height: element.type === 'text' ? 50 : 300,
+                width: element.type === 'text' ? 200 : Math.random() * 100 + 100,
+                height: element.type === 'text' ? 50 : Math.random() * 100 + 100,
                 styles: {
                     border: `2px solid ${Theme.third}`,
                     borderRadius: '2px',
                     fontSize: '25px',
                     fontWeight: 700,
-                    color: Theme.primaryText
+                    color: Theme.primaryText,
+                    zIndex: 1,
                 }
             });
         }

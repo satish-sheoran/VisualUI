@@ -27,7 +27,8 @@ const CanvasSlice = createSlice({
     initialState: {
         showCanvas: defaulSettings.showCanvas,
         Projects: getCanvasProject() ?? defaulSettings.Projects,
-        WorkingProject: null
+        WorkingProject: null,
+        selectedElement: {}
     },
     reducers: {
         setShowCanvas(state, action) {
@@ -73,6 +74,7 @@ const CanvasSlice = createSlice({
         setWorkingProject(state, action) {
             const { project } = action.payload
             state.WorkingProject = project;
+            state.selectedElement = {}; // Reset selectedElement when a new project is set
         },
         addElementToProject(state, action) {
             const { projectId, element } = action.payload;
@@ -85,10 +87,29 @@ const CanvasSlice = createSlice({
             );
             // 2. Save the updated state directly to localStorage
             localStorage.setItem('CanvasProject', JSON.stringify([...state.Projects]))
+        },
+        setSelectedElement(state, action) {
+            const { element } = action.payload;
+            state.selectedElement = element;
+        },
+        updateAddedElementInProject(state, action) {
+            const { projectId, elemCode, updatedElement } = action.payload;
+            if (!projectId || !updatedElement || !elemCode) return;
+
+            const date = new Date();
+            state.Projects = state.Projects.map((Project) =>
+                Project.id === projectId
+                    ? { ...Project, updatedAt: date.getTime(), elements: Project.elements.map((elem) => elem.uniqueCode === elemCode ? updatedElement : elem) }
+                    : Project
+            );
+
+            //  Save the updated state directly to localStorage
+            localStorage.setItem('CanvasProject', JSON.stringify([...state.Projects]))
+
         }
     }
 })
 
-export const { setShowCanvas, AddProject, setWorkingProject, AddToFavourite, UpdateProjectDetails, addElementToProject } = CanvasSlice.actions;
+export const { setShowCanvas, AddProject, setWorkingProject, AddToFavourite, UpdateProjectDetails, addElementToProject, setSelectedElement, updateAddedElementInProject } = CanvasSlice.actions;
 
 export default CanvasSlice.reducer;
