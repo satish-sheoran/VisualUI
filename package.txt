@@ -14,14 +14,14 @@ zod
 
 
 what i did for this commit :
-feat(canvas) : Showcased element and selecting them on Canvas 
+feat(canvas)  : Synced or let user change Text elements text
 
-- Element can be selected on canvas and active element will have accent coloured border
-- Synced Input elements value to Store
+- Added Text based controls in controls to change properties
+of Text element
 
-TODO For Next Commit: 
-1. Synced or let user change Text elements text
-2. Show element based controls in More option Section
+TODO : Make these OR Break them in ReUsable components
+- Create a ReUsable component for different properties
+- components can be Re-used then
 
 
 Suggestion :
