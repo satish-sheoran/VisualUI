@@ -68,7 +68,7 @@ const Insert = ({ ref, setActiveOverlayData }) => {
                                     fontFamily : Weights.SemiBold,
                                     fontSize : `${(Sizes.Small.slice(0,-3))*1.2}rem`
                                 }}
-                                className={`border py-1 rounded-2xl`}
+                                className={`font-semibold border py-1 rounded-2xl`}
                             >
                                 {section}
                             </button>

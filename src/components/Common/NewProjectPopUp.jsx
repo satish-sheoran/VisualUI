@@ -136,7 +136,7 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                                 fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
                                 fontFamily: Weights.Bold
                             }}
-                            className={`px-2 py-2.5 rounded-xl border outline-0`}
+                            className={`font-bold px-2 py-2.5 rounded-xl border outline-0`}
                         />
                         {errors?.ProjectName?.message && <p style={{
                             color: ACCENT_COLORS.find(({ COLOR }) => COLOR === 'Red')?.CODE,
@@ -174,9 +174,9 @@ const NewProjectPopUp = ({ showNewProjectPopUp, setShowNewProjectPopUp }) => {
                                 style={{
                                     color: Theme.primaryText,
                                     fontSize: `${(Sizes.Small.slice(0, -3)) * 0.95}rem`,
-                                    fontFamily: Weights.Bold
+                                    fontFamily: Weights.SemiBold
                                 }}
-                                className={`font-bold w-full px-2 py-2.5  outline-0`}
+                                className={`font-semibold w-full px-2 py-2.5  outline-0`}
                             />
                         </div>
                         {errors?.Description?.message && <p style={{

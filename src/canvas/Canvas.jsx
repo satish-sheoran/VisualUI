@@ -57,7 +57,7 @@ const Canvas = ({ showBurger, setshowBurger }) => {
                                 borderColor: Theme.third,
                                 backgroundColor: Theme.header
                             }}
-                            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl ${activeOverlayData === 'Settings' || activeOverlayData === 'Insert' ? '' : 'px-[2.5%] py-4'}  h-fit`}
+                            className={`absolute left-0 bottom-full mb-2 w-full flex flex-col gap-4 border rounded-2xl ${activeOverlayData === 'Settings' || activeOverlayData === 'Insert' ? '' : 'px-[2.5%] py-4'}  h-fit z-1000`}
                         >
                             {/* overlay where we do select ,drag, insert inside that element */}
                             {activeOverlayData === 'More' &&

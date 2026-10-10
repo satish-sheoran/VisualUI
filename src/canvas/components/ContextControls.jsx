@@ -1,18 +1,33 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import * as Icons from 'lucide-react'
 import { ACCENT_COLORS, COMMON_COLORS } from '../../constants/style'
 import { toast } from 'react-toastify'
 import gsap from 'gsap'
-import {  useRef } from 'react'
+import { useRef, useState } from 'react'
+import TextSelectControls from './SelectionControls/Texts/TextSelectControls'
+import { updateAddedElementInProject } from '../../store/features/Canvas'
 
 const RangeStep = 5
+const TextPosition = [
+    { position: 'left', iconName: 'TextAlignStart' },
+    { position: 'center', iconName: 'TextAlignCenter' },
+    { position: 'right', iconName: 'TextAlignEnd' },
+    { position: 'justify', iconName: 'TextAlignJustify' },
+];
 
 const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQuickControls, setShowQuickControls, zoom, setZoom }) => {
 
+    const dispatch = useDispatch();
     const { Sizes } = useSelector(store => store.Preferences.FontSize) //font sizes
     const Device = useSelector(store => store.Preferences.Device)
     const { Weights } = useSelector(store => store.Preferences.Font);
     const Theme = useSelector((store) => store.Preferences.Theme)
+    const activeProject = useSelector((store) => store.Canvas.WorkingProject)
+
+
+    // selected Element, currently activeElement is used to determine which element is selected in the canvas.
+    const selectedElement = useSelector((store) => store.Canvas.selectedElement)
+    const [ActivePositionName, setActivePositionName] = useState(selectedElement.styles.textAlign || 'left')
 
     // refs
     const QuickControlShowRef = useRef(null)
@@ -23,7 +38,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                 borderColor: Theme.third,
                 backgroundColor: Theme.header
             }}
-            className={`w-full flex flex-col gap-4 rounded-2xl px-[2.5%] py-4 h-fit`}
+            className={`w-full flex flex-col gap-4 rounded-2xl px-[2.5%] py-4 max-h-[75vh]`}
         >
             {/* select,drag and zoom controls */}
             <div className={`grid grid-cols-3 gap-2`}>
@@ -81,96 +96,12 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                     Drag canvas to navigate
                 </div>
             }
-            {activeTool === 'Select' && <>
+
+            {activeTool === 'Select' && <div className={`h-fit overflow-y-auto flex flex-col gap-3`}>
                 {/* Insert, layers, properties and settings */}
-                {/* 0 ,10,20...100% control of select,drag area or zoom area */}
-                <div className={`w-full flex items-center justify-center gap-3`}>
-                    <button
-                        onClick={() => setOpacity((prev) => prev - RangeStep < 0 ? 0 : prev - RangeStep)}
-                        style={{
-                            color: Theme.primaryText,
-                            backgroundColor: Theme.bg,
-                            borderColor: Theme.third
-                        }}
-                        className={`border flex items-center justify-center p-1.5 rounded-xl active:scale-95`}
-                    ><Icons.Minus size={18} /></button>
-
-                    <span
-                        style={{
-                            fontSize: `${(Sizes.Small.slice(0, -3)) * 1.05}rem`,
-                            fontFamily: Weights.Bold,
-                            color: Theme.primaryText
-                        }} 
-                        className={`font-bold`}
-                        >
-                        Opacity : {opacity}%
-                    </span>
-                    <input
-                        type="range"
-                        id='ranger'
-                        min='0'
-                        max='100'
-                        value={opacity}
-                        step={RangeStep}
-                        className={`grow`}
-                        onChange={(e) => setOpacity(Number(e.target.value))}
-                    />
-
-                    <button
-                        onClick={() => setOpacity((prev) => prev + RangeStep > 100 ? 100 : prev + RangeStep)}
-                        style={{
-                            color: Theme.primaryText,
-                            backgroundColor: Theme.bg,
-                            borderColor: Theme.third
-                        }}
-                        className={`border flex items-center justify-center p-1.5 rounded-xl active:scale-95`}
-                    ><Icons.Plus size={18} /></button>
-                </div>
-
-                <div className={`grid grid-cols-4 gap-2`}>
-                    {
-                        [
-                            {
-                                Option: 'Insert',
-                                icon: 'Plus',
-                                performAction: ''
-                            },
-                            {
-                                Option: 'Layers',
-                                icon: 'Layers',
-                                performAction: ''
-                            },
-                            {
-                                Option: 'Properties',
-                                icon: 'SlidersHorizontal',
-                                performAction: ''
-                            },
-                            {
-                                Option: 'Settings',
-                                icon: 'Settings',
-                                performAction: ''
-                            }
-                        ].map(({ Option, icon }) => {
-                            const Icon = Icons[icon]
-                            return <button
-                                key={Option}
-                                onClick={() => toast.info('Adding Soon...')}
-                                style={{
-                                    color: Theme.primaryText,
-                                    backgroundColor: Theme.bg,
-                                    borderColor: Theme.third,
-                                    fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`,
-                                    fontFamily: Weights.Bold
-                                }}
-                                className={`font-bold border flex flex-col items-center justify-center rounded-2xl p-1 active:scale-95`}
-                            >
-                                {Icon && <Icon size={17} strokeWidth={2} />}
-                                <span>{Option}</span>
-                            </button>
-                        })
-                    }
-                </div>
-
+                {selectedElement && selectedElement.type === 'text' &&
+                    <TextSelectControls />
+                }
 
                 {/* quick controls */}
                 <div
@@ -242,7 +173,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                 },
                                 {
                                     Option: 'Align',
-                                    icon: 'TextAlignStart',
+                                    icon: TextPosition.find(({ position }) => position === ActivePositionName).iconName,
                                     performAction: ''
                                 },
                                 {
@@ -260,7 +191,23 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                 return <button
                                     key={Option}
                                     onClick={(e) => {
-                                        e.stopPropagation()
+                                        e.stopPropagation();
+                                        if (Option === 'Align') {
+
+                                            const idx = TextPosition.findIndex(({ position }) => position === ActivePositionName);
+                                            let newAlignment = idx + 1 >= TextPosition.length ? TextPosition[0].position : TextPosition[idx + 1].position
+
+                                            dispatch(updateAddedElementInProject({
+                                                projectId: activeProject.id,
+                                                elemCode: selectedElement.uniqueCode,
+                                                updatedElement: {
+                                                    ...selectedElement,
+                                                    styles: { ...selectedElement.styles, textAlign: newAlignment }
+                                                }
+                                            }))
+                                            setActivePositionName(newAlignment)
+                                            return;
+                                        }
                                         toast.info('Adding Soon...')
                                     }}
                                     style={{
@@ -280,7 +227,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
 
                     </div>
                 </div>
-            </>
+            </div>
             }
 
             {

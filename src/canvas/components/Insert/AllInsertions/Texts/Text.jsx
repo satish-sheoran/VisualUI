@@ -15,7 +15,6 @@ const Text = ({ details }) => {
 
     const style = {
         ...details.styles,
-        color: Theme.primaryText,
 
         borderColor:
             (Object.keys(selectedElement || {}).length && selectedElement?.uniqueCode === details?.uniqueCode)
@@ -25,11 +24,14 @@ const Text = ({ details }) => {
         borderRadius: '10px',
         left: details.x,
         top: details.y,
-        width: 'fit',
         height: 'fit',
-        fontSize: Sizes.Regular,
+
+        ...(!('fontSize' in (details.styles || {})) && { fontSize: Sizes.Regular }),
+        ...(!('color' in (details.styles || {})) && { color: Theme.primaryText }),
+        ...(!('fontWeight' in (details.styles || {})) && { fontWeight: Weights.SemiBold }),
+
         padding: '4px 6px',
-        fontWeight: Weights.SemiBold
+
     }
 
     return (

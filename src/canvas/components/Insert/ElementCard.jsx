@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as ICONS from 'lucide-react';
 import { ACCENT_COLORS, COMMON_COLORS } from '../../../constants/style';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import gsap from 'gsap';
 import { addElementToProject } from '../../../store/features/Canvas';
 
@@ -52,13 +51,15 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
             elements: [],
             className: uniqueCode,
             // Custom sizing tailored by element category type
-            width: isInput || element.type === 'text' ? 150 : Math.random() * 100 + 100,
+            width: isInput || element.type === 'text' ? `250px` : Math.random() * 100 + 100,
             height: isInput || element.type === 'text' ? 'fit' : Math.random() * 100 + 100,
             styles: {
                 borderWidth: '2px',
                 borderStyle: 'solid',
                 borderRadius: '10px',
                 zIndex: 1,
+                fontSize: Sizes.Regular,
+                fontWeightName: 'Bold'
             }
         });
     };
@@ -101,15 +102,16 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
                 content: [defaultContent,],
                 x: 100,
                 y: 100,
-                width: element.type === 'text' ? 200 : Math.random() * 100 + 100,
+                width: element.type === 'text' ? `250px` : Math.random() * 100 + 100,
                 height: element.type === 'text' ? 50 : Math.random() * 100 + 100,
                 styles: {
                     border: `2px solid ${Theme.third}`,
                     borderRadius: '2px',
-                    fontSize: '25px',
+                    fontSize: Sizes.Regular,
                     fontWeight: 700,
                     color: Theme.primaryText,
                     zIndex: 1,
+                    fontWeightName: 'Bold'
                 }
             });
         }
@@ -131,7 +133,7 @@ const ElementCard = ({ element, ParentBoxRef, setSelectedTag, setCanCopy, CopyTi
                         fontSize: `${(Sizes.Small.slice(0, -3)) * 1.2}rem`,
                         fontFamily: Weights.SemiBold,
                         color: Theme.primaryText
-                    }}>{element.name}</h2>
+                    }} className='font-semibold'>{element.name}</h2>
                     <p style={{
                         fontSize: `${(Sizes.Small.slice(0, -3)) * 0.9}rem`,
                         fontFamily: Weights.Regular,
