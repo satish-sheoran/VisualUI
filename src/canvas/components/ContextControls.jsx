@@ -27,7 +27,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
 
     // selected Element, currently activeElement is used to determine which element is selected in the canvas.
     const selectedElement = useSelector((store) => store.Canvas.selectedElement)
-    const [ActivePositionName, setActivePositionName] = useState(selectedElement.styles.textAlign || 'left')
+    const [ActivePositionName, setActivePositionName] = useState(selectedElement?.styles?.textAlign || 'left')
 
     // refs
     const QuickControlShowRef = useRef(null)
@@ -173,7 +173,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                 },
                                 {
                                     Option: 'Align',
-                                    icon: TextPosition.find(({ position }) => position === ActivePositionName).iconName,
+                                    icon: TextPosition.find(({ position }) => position === ActivePositionName).iconName || 'TextAlignStart',
                                     performAction: ''
                                 },
                                 {
@@ -192,7 +192,7 @@ const ContextControls = ({ activeTool, setActiveTool, setOpacity, opacity, showQ
                                     key={Option}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        if (Option === 'Align') {
+                                        if (Option === 'Align' && selectedElement) {
 
                                             const idx = TextPosition.findIndex(({ position }) => position === ActivePositionName);
                                             let newAlignment = idx + 1 >= TextPosition.length ? TextPosition[0].position : TextPosition[idx + 1].position

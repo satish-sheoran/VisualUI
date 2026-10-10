@@ -14,14 +14,11 @@ zod
 
 
 what i did for this commit :
-feat(canvas)  : Synced or let user change Text elements text
+feat : Element based controls break down in ReUsable components
 
-- Added Text based controls in controls to change properties
-of Text element
-
-TODO : Make these OR Break them in ReUsable components
-- Create a ReUsable component for different properties
-- components can be Re-used then
+- Created a ReUsable component for different properties
+- components can be Re-used now
+- fixed some issues
 
 
 Suggestion :

@@ -19,7 +19,7 @@ const Text = ({ details }) => {
         borderColor:
             (Object.keys(selectedElement || {}).length && selectedElement?.uniqueCode === details?.uniqueCode)
                 ? ACCENT_COLORS.find(({ COLOR }) => COLOR === AccentColor).CODE
-                : Theme.third,
+                : (details.styles.borderColor || Theme.third),
 
         borderRadius: '10px',
         left: details.x,
